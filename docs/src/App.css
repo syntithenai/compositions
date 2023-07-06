@@ -1,7 +1,10 @@
 .App {
   text-align: center;
 }
-
+.media-modal {
+    width: 90vw;
+    max-width: 90vw;
+} 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
