@@ -18,11 +18,11 @@ export default function PlayerModal({audioFile}) {
   return (
     <>
       {!show && <>
-		  <Button variant="success"  onClick={handleShow}>{icons.play}</Button>
+		  <Button variant="success" size="lg" onClick={handleShow}>{icons.play}</Button>
 		 
 	  </>}
 	  {show && <>
-		  <Button variant="danger" onClick={handleClose}>{icons.stop}</Button>
+		  <Button variant="danger" size="lg"  onClick={handleClose}>{icons.stop}</Button>
 		  
 		  <Modal dialogClassName="media-modal" show={show} onHide={handleClose} >
 		  	<audio style={{padding:'1em', width:'90%'}} src={audioFile} controls={true} autoPlay={true} />

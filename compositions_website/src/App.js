@@ -6,7 +6,7 @@ import {Button, ButtonGroup} from 'react-bootstrap'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useRef} from 'react'
 import icons from './Icons'
 
 import files from './files.json'
@@ -15,17 +15,32 @@ import metafiles from './metafiles.json'
 import PlayerModal from './PlayerModal'
 import NotationModal from './NotationModal'
 import MediaPlayerModal from './MediaPlayerModal'
-
+import YoutubeModal from './MediaPlayerModal'
+import LyricsModal from './LyricsModal'
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import HelpContent from './HelpContent'
+
+function YouTubeGetID(url){
+            url = url.split(/(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+            return undefined !== url[2]?url[2].split(/[^0-9a-z_\-]/i)[0]:url[0];
+    }
+    function isYoutubeLink(urlToParse){
+        if (urlToParse) {
+            var regExp = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+            if (urlToParse.match(regExp)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 function App() {
 	
 	var allNames = {}
 	var allSections = {}
 	var [filter, setFilter] = useState('')
-	
+	var [meta, setMeta] = useState({})
 	
 	var splits = files.map(function(file) {
 		var fileParts = file.split(" ./")
@@ -50,7 +65,7 @@ function App() {
 		return final
 	})
 	
-	var meta = {}
+	//var meta = {}
 	var metaLinks = {}
 	metafiles.forEach(function(file) {
 		var parts = file.split("/")
@@ -64,9 +79,13 @@ function App() {
 		collate[split.name].push(split)
 	})
 	
+	function hasMeta(name) {
+		return metaLinks.hasOwnProperty(name) ? true : false
+	}
+	
 	function loadMeta(name) {
-		console.log("load meta",name)
-		if (!meta[name] && metaLinks[name]) {
+		console.log("load meta",name, hasMeta(name), meta)
+		if (hasMeta(name) && !meta[name]) {
 			fetch(metaLinks[name])
 			  .then(function(response) {
 				if (!response.ok) {
@@ -75,19 +94,27 @@ function App() {
 				return response.text();
 			  })
 			  .then(function(abcContent) {
-				  console.log("got abc")
+				  
 				  	var lines = abcContent.split("\n")
-					var songMeta = {}
-					console.log(lines)
+					var songMeta = {'lyrics':[], 'links':[]}
+					//console.log(lines)
 					lines.forEach(function(line) {
 						if (line.startsWith('T:')) {
-							console.log("tttttt",line)
-							songMeta['title'] = line
-						}
+							songMeta['title'] = line.slice(2)
+						} else if (line.startsWith('C:')) {
+							songMeta['composer'] = line.slice(2)
+						} else if (line.startsWith('W:')) {
+							songMeta['lyrics'].push(line.slice(2))
+						}  else if (line.startsWith('% abcbook-link') && !line.startsWith('% abcbook-link-title')) {
+							songMeta['links'].push(line.slice(17))
+						} 
+						
+						
 					})
-			
-					meta[name] = songMeta
-					console.log(meta)
+					var newMeta = meta
+					newMeta[name] = songMeta
+					setMeta(newMeta)
+					console.log("MM",newMeta)
 			  })
 				
 		} 
@@ -106,13 +133,14 @@ function App() {
 		  
 		>
 		  <Tab eventKey="search" title="Search">
-				<div><Button size='lg' style={{fontSize:'1.8em' ,marginBottom:'0.5em'}} >{icons.search}</Button><input autoFocus={true	} type='text' value={filter} onChange={function(e) {setFilter(e.target.value)}} style={{fontSize:'1.8em', width: '70%', marginBottom:'0.5em'}} /></div>
+		  	<div><Button size='lg' style={{fontSize:'1.8em' ,marginBottom:'0.5em'}} >{icons.search}</Button><input autoFocus={true	} type='text' value={filter} onChange={function(e) {setFilter(e.target.value)}} style={{fontSize:'1.8em', width: '70%', marginBottom:'0.5em'}} /></div>
 				<Container ><Row> 
 				  {Object.keys(collate).sort().map(function(name) {
 						if (filter && name.indexOf(filter) === -1) {
 							return null	
 						} else {
 							 return <Col onClick={function() {loadMeta(name)}} style={{border: '2px solid black', padding:'1em', minWidth:'20em'}} ><h3 style={{textTransform:'capitalize'}} >{name}</h3>
+								 { (meta && meta[name]) && <div style={{clear:'both'}} >{meta[name].composer}</div>}
 								{collate[name].map(function(file) {
 									
 										if (file.type === 'rg') {
@@ -120,16 +148,27 @@ function App() {
 										} else if (file.type === 'sng') {
 											return <span style={{float:'left'}} ><a target='_new' href={file.file} ><Button style={buttonStyle} >{icons.download} JJazzLab</Button></a></span>
 										} else if (file.type === 'mid' && file.section === 'rosegarden') {
-											return <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle}  ><Button variant="outline-primary" >Midi</Button> <a target='_new' href={file.file} ><Button>{icons.download}</Button></a><PlayerModal midiFile={file.file}  /></ButtonGroup></span>
+											return <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle}  ><Button variant="outline-primary" >Midi</Button> <a target='_new' href={file.file} ><Button size="lg" >{icons.download}</Button></a><PlayerModal midiFile={file.file}  /></ButtonGroup></span>
 										} else if (file.type === 'mid' && file.section === 'JJazzLab') {
-											return <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-primary" >Backing Midi</Button> <a target='_new' href={file.file} ><Button>{icons.download}</Button></a><PlayerModal midiFile={file.file}  /></ButtonGroup></span>
+											return <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-primary" >Backing Midi</Button> <a target='_new' href={file.file} ><Button size="lg" >{icons.download}</Button></a><PlayerModal midiFile={file.file}  /></ButtonGroup></span>
 										} else if (file.type === 'mp3') {
-											return <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-success" >MP3</Button> <a target='_new' href={file.file} ><Button variant="success" >{icons.download}</Button></a><MediaPlayerModal audioFile={file.file}  /></ButtonGroup></span>
+											return <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-success" >MP3</Button> <a target='_new' href={file.file} ><Button size="lg" variant="success" >{icons.download}</Button></a><MediaPlayerModal audioFile={file.file}  /></ButtonGroup></span>
 										} else if (file.type === 'xml') {
-											return <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-primary" >{icons.musicblue} XML</Button> <a target='_new' href={file.file} ><Button variant="primary" >{icons.download}</Button></a><NotationModal notationFile={file.file}  /></ButtonGroup></span>
+											return <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-primary" >{icons.musicblue}</Button> <a target='_new' href={file.file} ><Button variant="primary" >{icons.download}</Button></a><NotationModal notationFile={file.file}  /></ButtonGroup></span>
 										} 
+										
 									
 								})}
+								{hasMeta(name) && <span style={{float:'left'}} ><LyricsModal meta={meta[name]} /></span>}
+								{(hasMeta(name) && meta[name] && meta[name].links.length > 0) && <div>{meta[name].links.map(function(l) {
+									if (isYoutubeLink(l)) {
+										<YoutubeModal youtubeId={YouTubeGetID(l)} />
+									} else {
+										<MediaPlayerModal audioFile={l}  />
+									}
+								})}</div>}
+							 	
+								
 								</Col>
 						}
 				})}

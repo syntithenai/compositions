@@ -51,7 +51,7 @@ export default function PlayerModal({midiFile}) {
   
   return (
     <>
-      {!show && <Button variant="primary"  onClick={handleShow}>{icons.play}</Button>}
+      {!show && <Button variant="primary" size="lg"  onClick={handleShow}>{icons.play}</Button>}
 	  {show && 
 		  <Modal dialogClassName="media-modal" show={show} onHide={handleClose}>
 			<WindowFocusHandler onFocus={onFocus} onBlur={onBlur} />

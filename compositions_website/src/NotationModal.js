@@ -17,7 +17,7 @@ export default function NotationModal({notationFile}) {
   return (
     <>
       {!show && <>
-		  <Button variant="primary"  onClick={handleShow}>{icons.music}</Button>
+		  <Button variant="primary"  onClick={handleShow}>{icons.search}</Button>
 		 
 	  </>}
 	  {show && <>
