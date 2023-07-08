@@ -27,7 +27,7 @@ export default function HomeTile({collate, meta, name, loadMeta, hasMeta}) {
 				downloads.push(<a target='_new' href={file.file} ><Button size="lg"  style={buttonStyle} >{icons.download} JJazzLab</Button></a>)
 			} else if (file.type === 'mid' && file.section === 'rosegarden') {
 				downloads.push(<a target='_new' href={file.file} ><Button size="lg" >{icons.download} Midi</Button></a>)
-				buttons.push(<PlayerModal midiFile={file.file}  />)
+				buttons.push(<PlayerModal midiFile={file.file} meta={meta[name]}  />)
 				//return <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle}  ><Button variant="outline-primary" >Midi</Button> <a target='_new' href={file.file} ><Button size="lg" >{icons.download}</Button></a></ButtonGroup></span>
 			} else if (file.type === 'mid' && file.section === 'JJazzLab') {
 				downloads.push(<a target='_new' href={file.file} ><Button size="lg"  >{icons.download} Backing Midi</Button></a>)
@@ -35,7 +35,7 @@ export default function HomeTile({collate, meta, name, loadMeta, hasMeta}) {
 				//return <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-primary" >Backing Midi</Button> <a target='_new' href={file.file} ><Button size="lg" >{icons.download}</Button></a><PlayerModal midiFile={file.file}  /></ButtonGroup></span>
 			} else if (file.type === 'mp3') {
 				downloads.push(<a target='_new' href={file.file} ><Button size="lg" variant="success" >{icons.download} MP3</Button></a>)
-				buttons.push(<MediaPlayerModal audioFile={file.file}  />)
+				buttons.push(<MediaPlayerModal audioFile={file.file}  meta={meta[name]}  />)
 				//return <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-success" >MP3</Button> <a target='_new' href={file.file} ><Button size="lg" variant="success" >{icons.download}</Button></a><MediaPlayerModal audioFile={file.file}  /></ButtonGroup></span>
 			} else if (file.type === 'xml') {
 				downloads.push(<a target='_new' href={file.file} ><Button size="lg" variant="primary" >{icons.music} MusicXML</Button></a> )

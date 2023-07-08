@@ -8,7 +8,7 @@ import AudioPlayer from 'react-modern-audio-player';
 
 
 
-export default function PlayerModal({audioFile}) {
+export default function PlayerModal({audioFile, meta}) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -26,7 +26,9 @@ export default function PlayerModal({audioFile}) {
 		  
 		  <Modal dialogClassName="media-modal" show={show} onHide={handleClose} >
 		  	<audio style={{padding:'1em', width:'90%'}} src={audioFile} controls={true} autoPlay={true} />
-		
+		{(meta && meta.lyrics) && <div style={{margin:'1em', fontSize:'1.7em'}} >{meta.lyrics.map(function(l) {
+				return (l.trim().length > 0) ?  <div>{l}</div> : <div><br/></div>
+			})}</div>}
 		  </Modal>
 
 	   </>}

@@ -10,7 +10,7 @@ var webaudiofont = require('webaudiofont');
 
 
 
-export default function PlayerModal({midiFile}) {
+export default function PlayerModal({midiFile, meta}) {
   const [show, setShow] = useState(false);
   const [progress, setProgress] = useState(0);
   
@@ -71,6 +71,9 @@ export default function PlayerModal({midiFile}) {
 				return <div style={{clear:'both', height:'2em'}} ><div style={{float:'left', width: '13em', fontWeight:'bold'}}>{instrument}</div> <input type="range" value={midiPlayer.getTrackDrumVolume(instrumentKey)} onChange={function(e) {midiPlayer.setDrumVolume(instrumentKey, e.target.value)} }  style={{float:'left', width:'50%'}} /></div>
 			})}
 			</div>
+			{(meta && meta.lyrics) && <div style={{margin:'1em', fontSize:'1.7em'}} >{meta.lyrics.map(function(l) {
+				return (l.trim().length > 0) ?  <div>{l}</div> : <div><br/></div>
+			})}</div>}
 			</Modal.Body>
 		  </Modal>}
       

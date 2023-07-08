@@ -12,10 +12,7 @@ import {WebAudioFontPlayer} from './WebAudioFontPlayer'
 export default function useMidiPlayer(props) {
 		//console.log('start');
 		var audioContext = useRef()
-		useEffect(function() {
-			var AudioContextFunc = window.AudioContext || window.webkitAudioContext;
-			audioContext.current = new AudioContextFunc();
-		},[])
+		
 		var player = useRef();
 		var reverberator = null;
 		var equalizer = null;
@@ -66,6 +63,7 @@ export default function useMidiPlayer(props) {
 				songStart.current = songStart.current - (next - currentSongTime);
 				currentSongTime = next;
 				console.log(['seeked',songStart.current, next, currentSongTime, nextPositionTime])
+				if (props.onProgress) props.onProgress(currentSongTime/song.current.duration * 100)
 			}
 		}
 		
@@ -128,6 +126,7 @@ export default function useMidiPlayer(props) {
 							var instr = track.info.variable;
 							var v = track.volume / 7;
 							try {
+								console.log(when, songStart, track.notes[i].when)
 								player.current.queueWaveTable(audioContext.current, input, window[instr], when, track.notes[i].pitch, duration, v, track.notes[i].slides);
 							} catch (e) {console.log(e)}
 						}
@@ -154,6 +153,8 @@ export default function useMidiPlayer(props) {
 		 * Load and parse a midi file
 		 **/
 		function loadMidi(path) {
+			var AudioContextFunc = window.AudioContext || window.webkitAudioContext;
+			audioContext.current = new AudioContextFunc();
 			setMidiPath(path)
 			console.log("LOAD MIDI",path);
 			var xmlHttpRequest = new XMLHttpRequest();
