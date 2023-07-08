@@ -14,11 +14,11 @@ export default function LyricsModal({meta}) {
 
   return (
     <>
-      {!show && <>
+      {(!show || !meta) && <>
 		  <Button variant="primary"  onClick={handleShow}>Lyrics</Button>
 		 
 	  </>}
-	  {show && <>
+	  {(show && meta) && <>
 		  <Button variant="danger" onClick={handleClose}>Lyrics</Button>
 		  
 		  <Modal dialogClassName="media-modal" show={show} onHide={handleClose} >

@@ -21,6 +21,18 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import HelpContent from './HelpContent'
 
+String.prototype.hashCode = function() {
+  var hash = 0,
+    i, chr;
+  if (this.length === 0) return hash;
+  for (i = 0; i < this.length; i++) {
+    chr = this.charCodeAt(i);
+    hash = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+}
+
 function YouTubeGetID(url){
             url = url.split(/(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/)/);
             return undefined !== url[2]?url[2].split(/[^0-9a-z_\-]/i)[0]:url[0];
@@ -41,6 +53,7 @@ function App() {
 	var allSections = {}
 	var [filter, setFilter] = useState('')
 	var [meta, setMeta] = useState({})
+	var [metaHash, setMetaHash] = useState({})
 	
 	var splits = files.map(function(file) {
 		var fileParts = file.split(" ./")
@@ -114,6 +127,7 @@ function App() {
 					var newMeta = meta
 					newMeta[name] = songMeta
 					setMeta(newMeta)
+					setMetaHash(JSON.stringify(newMeta).hashCode())
 					console.log("MM",newMeta)
 			  })
 				
@@ -126,6 +140,7 @@ function App() {
 
   return (
     <div className="App">
+    <input type='hidden' value={metaHash} />
 		<Tabs 
 		  defaultActiveKey="search"
 		  id="app-tabs"
@@ -160,6 +175,7 @@ function App() {
 									
 								})}
 								{hasMeta(name) && <span style={{float:'left'}} ><LyricsModal meta={meta[name]} /></span>}
+								
 								{(hasMeta(name) && meta[name] && meta[name].links.length > 0) && <div>{meta[name].links.map(function(l) {
 									if (isYoutubeLink(l)) {
 										<YoutubeModal youtubeId={YouTubeGetID(l)} />

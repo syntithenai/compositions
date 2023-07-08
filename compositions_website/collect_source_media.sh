@@ -23,6 +23,6 @@ ls  -gG -l --time-style='+%Y-%m-%d_%H:%M' ./public/rosegarden/*.rg|cut -b 20-500
 ls  -gG -l --time-style='+%Y-%m-%d_%H:%M' ./public/rosegarden/*.xml|cut -b 20-500 >> files.txt
 
 cat files.txt|jq -Rn '[inputs]' > ./src/files.json
-cat metafiles.txt|jq -Rn '[inputs]' > ./src/metafiles.json
+ls ./public/meta|jq -Rn '[inputs]' > ./src/metafiles.json
 #rm files.txt
 	
