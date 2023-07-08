@@ -16,7 +16,15 @@ class OpenSheetMusicDisplay extends Component {
 			drawTitle: this.props.drawTitle !== undefined ? this.props.drawTitle : true,
 		  }
 		  this.osmd = new OSMD(this.divRef.current, options);
-		  this.osmd.load(this.props.file).then(() => this.osmd.render());
+		  console.log(this.osmd)
+		  this.osmd.load(this.props.file).then(() => {
+			  console.log('loaded')
+			  try {
+				this.osmd.render()
+			  } catch (e) {
+				  console.log(e)
+			  }
+		  });
 		}
     }
   
@@ -28,14 +36,14 @@ class OpenSheetMusicDisplay extends Component {
       //window.removeEventListener('resize', this.resize)
     //}
   
-    componentDidUpdate(prevProps) {
-      if (this.props.drawTitle !== prevProps.drawTitle) {
-        this.setupOsmd();
-      } else if (this.props.file) {
-        this.osmd.load(this.props.file).then(() => this.osmd.render());
-      }
-      //window.addEventListener('resize', this.resize)
-    }
+    //componentDidUpdate(prevProps) {
+      //if (this.props.drawTitle !== prevProps.drawTitle) {
+        //this.setupOsmd();
+      //} else if (this.props.file) {
+        //this.osmd.load(this.props.file).then(() => this.osmd.render());
+      //}
+      ////window.addEventListener('resize', this.resize)
+    //}
   
     // Called after render
     componentDidMount() {

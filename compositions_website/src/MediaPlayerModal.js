@@ -18,7 +18,7 @@ export default function PlayerModal({audioFile}) {
   return (
     <>
       {!show && <>
-		  <Button variant="success" size="lg" onClick={handleShow}>{icons.play}</Button>
+		  <Button variant="success" size="lg" onClick={handleShow}>{icons.play} MP3</Button>
 		 
 	  </>}
 	  {show && <>

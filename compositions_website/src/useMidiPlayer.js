@@ -61,11 +61,11 @@ export default function useMidiPlayer(props) {
 		function seek(percent) {
 			console.log(['seek',songStart.current, song.current.duration, percent,player.current,song.current])
 			if (player.current && song.current) {
-				//player.current.cancelQueue(audioContext.current);
+				player.current.cancelQueue(audioContext.current);
 				var next = song.current.duration * percent / 100;
-				//songStart.current = songStart.current - (next - currentSongTime);
-				//currentSongTime = next;
-				console.log(['seeked',songStart.current, next])
+				songStart.current = songStart.current - (next - currentSongTime);
+				currentSongTime = next;
+				console.log(['seeked',songStart.current, next, currentSongTime, nextPositionTime])
 			}
 		}
 		

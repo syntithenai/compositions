@@ -29,11 +29,11 @@ export default function YoutubeModal({youtubeId}) {
   return (
     <>
       {!show && <>
-		  <Button variant="primary"  onClick={handleShow}>{icons.play}</Button>
+		  <Button variant="success"  size="lg"  onClick={handleShow}>{icons.youtube} YouTube</Button>
 		 
 	  </>}
 	  {show && <>
-		  <Button variant="danger" onClick={handleClose}>{icons.stop}</Button>
+		  <Button variant="danger"  size="lg"  onClick={handleClose}>{icons.stop}</Button>
 		  
 		  <Modal dialogClassName="media-modal" show={show} onHide={handleClose} >
 		  	return <YouTube videoId="{youtubeId}" opts={opts} onReady={this._onReady} />;

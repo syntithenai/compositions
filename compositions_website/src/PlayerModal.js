@@ -51,13 +51,13 @@ export default function PlayerModal({midiFile}) {
   
   return (
     <>
-      {!show && <Button variant="primary" size="lg"  onClick={handleShow}>{icons.play}</Button>}
+      {!show && <Button variant="success" size="lg"  onClick={handleShow}>{icons.play} Midi</Button>}
 	  {show && 
 		  <Modal dialogClassName="media-modal" show={show} onHide={handleClose}>
 			<WindowFocusHandler onFocus={onFocus} onBlur={onBlur} />
 			<Modal.Body>
 			<Button variant="danger" size="lg" style={{float:'left', maxWidth: '5em', marginBottom:'1em'}}  onClick={handleClose}>{icons.stop}</Button> 
-			<input style={{float:'left',width:'90%', marginLeft:'1em', height:'1.8em'}} type="range" min="0" max="100" value="0" step="1" value={progress} onChange={function(e) { midiPlayer.seek(e.target.value); setProgress(e.target.value);}} />
+			<input style={{float:'left',width:'90%', marginLeft:'1em', height:'1.8em'}} type="range" min="0" max="100" value="0" step="1" value={progress} onInput={function(e) { midiPlayer.seek(e.target.value); setProgress(e.target.value);}} />
 			<h4 style={{clear:'both', marginTop:'2em'}} >Tracks</h4>
 			<div>
 			{trackOptions.map(function(instrument, instrumentKey) {

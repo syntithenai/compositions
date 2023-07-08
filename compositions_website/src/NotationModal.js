@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import icons from './Icons'
-import {useEffect} from 'react'
+import {useEffect, useRef} from 'react'
 
 import OpenSheetMusicDisplay from './OpenSheetMusicDisplay'
 
@@ -13,19 +13,28 @@ export default function NotationModal({notationFile}) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   
+  
+  //var osmd = useRef()
+  //useEffect(function() {
+	  //try {
+		//if (notationFile) osmd.current = 
+	  //} catch (e) {
+		  //console.log("OSDM ",e)
+	  //}
+  //},[])
 
   return (
     <>
       {!show && <>
-		  <Button variant="primary"  onClick={handleShow}>{icons.search}</Button>
+		  <Button variant="dark"  size="lg"   onClick={handleShow}>{icons.music} Notation</Button>
 		 
 	  </>}
 	  {show && <>
-		  <Button variant="danger" onClick={handleClose}>{icons.music}</Button>
+		  <Button variant="danger"  size="lg"  onClick={handleClose}>{icons.music}</Button>
 		  
 		  <Modal dialogClassName="media-modal" show={show} onHide={handleClose} >
-		  	{notationFile && <OpenSheetMusicDisplay file={notationFile} />}
-		
+		  	
+		<OpenSheetMusicDisplay file={notationFile} />
 		  </Modal>
 
 	   </>}
@@ -34,3 +43,4 @@ export default function NotationModal({notationFile}) {
   );
 }
 	
+//{(notationFile && osmd.current ) && osmd.current}

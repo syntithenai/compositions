@@ -15,37 +15,13 @@ import metafiles from './metafiles.json'
 import PlayerModal from './PlayerModal'
 import NotationModal from './NotationModal'
 import MediaPlayerModal from './MediaPlayerModal'
-import YoutubeModal from './MediaPlayerModal'
+import YoutubeModal from './YoutubeModal'
 import LyricsModal from './LyricsModal'
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import HelpContent from './HelpContent'
-
-String.prototype.hashCode = function() {
-  var hash = 0,
-    i, chr;
-  if (this.length === 0) return hash;
-  for (i = 0; i < this.length; i++) {
-    chr = this.charCodeAt(i);
-    hash = ((hash << 5) - hash) + chr;
-    hash |= 0; // Convert to 32bit integer
-  }
-  return hash;
-}
-
-function YouTubeGetID(url){
-            url = url.split(/(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-            return undefined !== url[2]?url[2].split(/[^0-9a-z_\-]/i)[0]:url[0];
-    }
-    function isYoutubeLink(urlToParse){
-        if (urlToParse) {
-            var regExp = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-            if (urlToParse.match(regExp)) {
-                return true;
-            }
-        }
-        return false;
-    }
+import {YouTubeGetID, isYoutubeLink} from './utils'
+import HomeTile from './HomeTile'
 
 function App() {
 	
@@ -136,7 +112,6 @@ function App() {
 	
 //  {JSON.stringify(collate)}
 	var buttonStyle={marginBottom:'0.5em', 'border': '1px solid #0d6efd'}
-	var buttonStyle={marginBottom:'0.5em', 'border': '1px solid #0d6efd'}
 
   return (
     <div className="App">
@@ -154,38 +129,7 @@ function App() {
 						if (filter && name.indexOf(filter) === -1) {
 							return null	
 						} else {
-							 return <Col onClick={function() {loadMeta(name)}} style={{border: '2px solid black', padding:'1em', minWidth:'20em'}} ><h3 style={{textTransform:'capitalize'}} >{name}</h3>
-								 { (meta && meta[name]) && <div style={{clear:'both'}} >{meta[name].composer}</div>}
-								{collate[name].map(function(file) {
-									
-										if (file.type === 'rg') {
-											return <span style={{float:'left'}} ><a target='_new' href={file.file} ><Button style={Object.assign(buttonStyle,{marginRight:'1em'})} >{icons.download} Rosegarden</Button></a></span>
-										} else if (file.type === 'sng') {
-											return <span style={{float:'left'}} ><a target='_new' href={file.file} ><Button style={buttonStyle} >{icons.download} JJazzLab</Button></a></span>
-										} else if (file.type === 'mid' && file.section === 'rosegarden') {
-											return <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle}  ><Button variant="outline-primary" >Midi</Button> <a target='_new' href={file.file} ><Button size="lg" >{icons.download}</Button></a><PlayerModal midiFile={file.file}  /></ButtonGroup></span>
-										} else if (file.type === 'mid' && file.section === 'JJazzLab') {
-											return <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-primary" >Backing Midi</Button> <a target='_new' href={file.file} ><Button size="lg" >{icons.download}</Button></a><PlayerModal midiFile={file.file}  /></ButtonGroup></span>
-										} else if (file.type === 'mp3') {
-											return <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-success" >MP3</Button> <a target='_new' href={file.file} ><Button size="lg" variant="success" >{icons.download}</Button></a><MediaPlayerModal audioFile={file.file}  /></ButtonGroup></span>
-										} else if (file.type === 'xml') {
-											return <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-primary" >{icons.musicblue}</Button> <a target='_new' href={file.file} ><Button variant="primary" >{icons.download}</Button></a><NotationModal notationFile={file.file}  /></ButtonGroup></span>
-										} 
-										
-									
-								})}
-								{hasMeta(name) && <span style={{float:'left'}} ><LyricsModal meta={meta[name]} /></span>}
-								
-								{(hasMeta(name) && meta[name] && meta[name].links.length > 0) && <div>{meta[name].links.map(function(l) {
-									if (isYoutubeLink(l)) {
-										<YoutubeModal youtubeId={YouTubeGetID(l)} />
-									} else {
-										<MediaPlayerModal audioFile={l}  />
-									}
-								})}</div>}
-							 	
-								
-								</Col>
+							 return <HomeTile collate={collate} name={name} meta={meta} hasMeta={hasMeta} loadMeta={loadMeta} />
 						}
 				})}
 				</Row></Container> 

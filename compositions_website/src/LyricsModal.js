@@ -15,11 +15,11 @@ export default function LyricsModal({meta}) {
   return (
     <>
       {(!show || !meta) && <>
-		  <Button variant="primary"  onClick={handleShow}>Lyrics</Button>
+		  <Button variant="dark"  size="lg"  onClick={handleShow}>{icons.quill} Lyrics</Button>
 		 
 	  </>}
 	  {(show && meta) && <>
-		  <Button variant="danger" onClick={handleClose}>Lyrics</Button>
+		  <Button variant="danger"  size="lg"  onClick={handleClose}></Button>
 		  
 		  <Modal dialogClassName="media-modal" show={show} onHide={handleClose} >
 			<Modal.Header closeButton ><h3>{meta.title}</h3> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>{meta.composer}</i></Modal.Header>
