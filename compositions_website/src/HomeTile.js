@@ -6,6 +6,7 @@ import {useState, useEffect, useRef} from 'react'
 import icons from './Icons'
 
 import PlayerModal from './PlayerModal'
+import ChordsModal from './ChordsModal'
 import NotationModal from './NotationModal'
 import MediaPlayerModal from './MediaPlayerModal'
 import YoutubeModal from './YoutubeModal'
@@ -13,7 +14,8 @@ import LyricsModal from './LyricsModal'
 import {YouTubeGetID, isYoutubeLink} from './utils'
 import LinksModal from './LinksModal'
 
-export default function HomeTile({collate, meta, name, loadMeta, hasMeta}) {
+
+export default function HomeTile({collate, meta, name, loadMeta, hasMeta, metaLinks}) {
 	var buttonStyle={marginBottom:'0.5em', 'border': '1px solid #0d6efd'}
 	
 	var downloads=[]
@@ -25,6 +27,7 @@ export default function HomeTile({collate, meta, name, loadMeta, hasMeta}) {
 				downloads.push(<a target='_new' href={file.file} ><Button  size="lg"  style={Object.assign(buttonStyle,{marginRight:'1em'})} >{icons.download} Rosegarden</Button></a>)
 			} else if (file.type === 'sng') {
 				downloads.push(<a target='_new' href={file.file} ><Button size="lg"  style={buttonStyle} >{icons.download} JJazzLab</Button></a>)
+				buttons.push(<ChordsModal songFile={file.file} />)
 			} else if (file.type === 'mid' && file.section === 'rosegarden') {
 				downloads.push(<a target='_new' href={file.file} ><Button size="lg" >{icons.download} Midi</Button></a>)
 				buttons.push(<PlayerModal midiFile={file.file} meta={meta[name]}  />)

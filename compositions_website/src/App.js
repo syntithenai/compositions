@@ -72,6 +72,8 @@ function App() {
 		return metaLinks.hasOwnProperty(name) ? true : false
 	}
 	
+	
+	
 	function loadMeta(name) {
 		console.log("load meta",name, hasMeta(name), meta)
 		if (hasMeta(name) && !meta[name]) {
@@ -116,6 +118,7 @@ function App() {
   return (
     <div className="App">
     <input type='hidden' value={metaHash} />
+		<div style={{float:'left', border: '1px solid blue', padding:'0.5em'}} ><img src="favicon.png" style={{height:'2em'}} />&nbsp;&nbsp;Music By Steve Ryan</div>
 		<Tabs 
 		  defaultActiveKey="search"
 		  id="app-tabs"
@@ -129,7 +132,7 @@ function App() {
 						if (filter && name.indexOf(filter) === -1) {
 							return null	
 						} else {
-							 return <HomeTile collate={collate} name={name} meta={meta} hasMeta={hasMeta} loadMeta={loadMeta} />
+							 return <HomeTile collate={collate} name={name} meta={meta} hasMeta={hasMeta} loadMeta={loadMeta} metaLinks={metaLinks} />
 						}
 				})}
 				</Row></Container> 

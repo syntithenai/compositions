@@ -18,7 +18,7 @@ export default function useMidiPlayer(props) {
 		var equalizer = null;
 		var songStart = useRef();
 		var input = null;
-		var currentSongTime = 0;
+		var currentSongTime = useRef(0);
 		var nextStepTime = 0;
 		var nextPositionTime = 0;
 		var loadedsong = null;
@@ -56,14 +56,14 @@ export default function useMidiPlayer(props) {
 		 * Seek playback from current position
 		 **/
 		function seek(percent) {
-			console.log(['seek',songStart.current, song.current.duration, percent,player.current,song.current])
+			console.log(['seek', 'Dur',song.current.duration, 'SStart',songStart.current, 'CurrentTime',currentSongTime.current,  percent, player.current, song.current])
 			if (player.current && song.current) {
 				player.current.cancelQueue(audioContext.current);
 				var next = song.current.duration * percent / 100;
-				songStart.current = songStart.current - (next - currentSongTime);
-				currentSongTime = next;
-				console.log(['seeked',songStart.current, next, currentSongTime, nextPositionTime])
-				if (props.onProgress) props.onProgress(currentSongTime/song.current.duration * 100)
+				songStart.current = songStart.current + (next - currentSongTime.current);
+				currentSongTime.current = next;
+				console.log(['seeked','Dur',song.current.duration, 'SStart',songStart.current, 'CurrentTime',currentSongTime.current,  percent, next, player.current, song.current])
+				if (props.onProgress) props.onProgress(currentSongTime.current/song.current.duration * 100)
 			}
 		}
 		
@@ -72,7 +72,7 @@ export default function useMidiPlayer(props) {
 		 **/
 		function start() {
 			console.log('start', audioContext.current)
-			//currentSongTime = 0;
+			//currentSongTime.current = 0;
 			if (audioContext.current) {
 				songStart.current = audioContext.current.currentTime;
 				nextStepTime = audioContext.current.currentTime;
@@ -88,16 +88,16 @@ export default function useMidiPlayer(props) {
 		function tick() {
 			//console.log(['tick',audioContext.current])
 			if (song.current && audioContext.current && isPlaying.current && audioContext.current.currentTime > nextStepTime - stepDuration) {
-				sendNotes(songStart.current, currentSongTime, currentSongTime + stepDuration, input, player);
-				currentSongTime = currentSongTime + stepDuration;
+				sendNotes(songStart.current, currentSongTime.current, currentSongTime.current + stepDuration, input, player);
+				currentSongTime.current = currentSongTime.current + stepDuration;
 				nextStepTime = nextStepTime + stepDuration;
 				
-				if (currentSongTime > song.current.duration) {
-					currentSongTime = currentSongTime - song.current.duration;
-					sendNotes( songStart.current, 0, currentSongTime, input, player);
+				if (currentSongTime.current > song.current.duration) {
+					currentSongTime.current = currentSongTime.current - song.current.duration;
+					sendNotes( songStart.current, 0, currentSongTime.current, input, player);
 					songStart = songStart.current + song.current.duration;
 				}
-				if (props.onProgress) props.onProgress(currentSongTime/song.current.duration * 100)
+				if (props.onProgress) props.onProgress(currentSongTime.current/song.current.duration * 100)
 			}
 			//if (nextPositionTime < audioContext.current.currentTime) {
 				////var o = document.getElementById('position');
@@ -126,9 +126,9 @@ export default function useMidiPlayer(props) {
 							var instr = track.info.variable;
 							var v = track.volume / 7;
 							try {
-								console.log(when, songStart, track.notes[i].when)
+								console.log('SStart',songStart,'N@', when,  'Norig',track.notes[i].when)
 								player.current.queueWaveTable(audioContext.current, input, window[instr], when, track.notes[i].pitch, duration, v, track.notes[i].slides);
-							} catch (e) {console.log(e)}
+							} catch (e) {console.log(e); stop()}
 						}
 					}
 				}
