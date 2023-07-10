@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { OpenSheetMusicDisplay as OSMD } from 'opensheetmusicdisplay';
+import {useRef} from 'react'
+
 
 class OpenSheetMusicDisplay extends Component {
     constructor(props) {
@@ -7,6 +9,8 @@ class OpenSheetMusicDisplay extends Component {
       this.state = { dataReady: false };
       this.osmd = undefined;
       this.divRef = React.createRef();
+      //this.rendered = useRef();
+      this.isRendered = React.createRef(false)
     }
   
     setupOsmd() {
@@ -18,11 +22,18 @@ class OpenSheetMusicDisplay extends Component {
 		  this.osmd = new OSMD(this.divRef.current, options);
 		  console.log(this.osmd)
 		  this.osmd.load(this.props.file).then(() => {
-			  console.log('loaded')
-			  try {
-				this.osmd.render()
-			  } catch (e) {
-				  console.log(e)
+			  console.log('loaded',this.isRendered)
+			  if (!this.isRendered.current) {
+				  console.log('render')
+				  
+				  try {
+					this.osmd.render()
+					this.isRendered.current = true
+				  } catch (e) {
+					  console.log(e)
+					  
+				  }
+				  
 			  }
 		  });
 		}

@@ -5,6 +5,7 @@
   <spTempo>143</spTempo>
   <spClientProperties>
     <property name="PropSsEditorZoomFactorX" value="100"/>
+    <property name="SectionDisplayQuantization-verse*4/4" value="ONE_QUARTER_BEAT"/>
     <property name="PropCompactViewModeVisibleRps_SmoothOperator.STY-ID" value="rpVariationID,rpIntensityID,RpFillID"/>
     <property name="PropCompactViewModeVisibleRps_CoolBand.S053.sty-ID" value="rpVariationID,rpIntensityID,RpFillID"/>
     <property name="PropCompactViewModeVisibleRps_60&apos;sRock&amp;Roll.S605.prs-ID" value="rpVariationID,rpIntensityID,RpFillID"/>
@@ -13,7 +14,6 @@
     <property name="PropCompactViewModeVisibleRps_FingerPickin.sty-ID" value="rpVariationID,rpIntensityID,RpFillID"/>
     <property name="SectionDisplayQuantization-chorus*4/4" value="ONE_QUARTER_BEAT"/>
     <property name="PropCompactViewModeVisibleRps_GuitarPop.S557.prs-ID" value="rpVariationID,rpIntensityID,RpFillID"/>
-    <property name="SectionDisplayQuantization-A*4/4" value="ONE_QUARTER_BEAT"/>
     <property name="PropCompactViewModeVisibleRps_Cantabile.yjz-ID" value="rpVariationID,rpIntensityID,RpFillID"/>
     <property name="PropCompactViewModeVisibleRps_HardRock.S512.bcs-ID" value="rpVariationID,rpIntensityID,RpFillID"/>
   </spClientProperties>
@@ -23,7 +23,7 @@
     <spItems>
       <org.jjazz.leadsheet.chordleadsheet.item.CLI__SectionImpl resolves-to="org.jjazz.leadsheet.chordleadsheet.item.CLI_SectionImpl$SerializationProxy">
         <spVERSION>1</spVERSION>
-        <spName>A</spName>
+        <spName>verse</spName>
         <spTs>FOUR_FOUR</spTs>
         <spBarIndex>0</spBarIndex>
       </org.jjazz.leadsheet.chordleadsheet.item.CLI__SectionImpl>

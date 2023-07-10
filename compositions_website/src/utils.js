@@ -25,5 +25,45 @@ function isYoutubeLink(urlToParse){
 	return false;
 }
 
+function mapKeySignature(text) {
+	switch (text) {
+		case 'TWO_FOUR':
+			return '2/4'
+		case 'THREE_FOUR':
+			return '3/4'
+		case 'FOUR_FOUR':
+			return '4/4'
+		case 'SIX_EIGHT':
+			return '6/8'
+		case 'NINE_EIGHT':
+			return '9/8'
+		case 'TWELVE_EIGHT':
+			return '12/8'
+	}
+}
 
-export  {YouTubeGetID, isYoutubeLink}
+function getBeatsPerBar(text) {
+	switch (text) {
+		case '2/4':
+			return 2
+		case '3/4':
+			return 3
+		case '4/4':
+			return 4
+		case '6/8':
+			return 2
+		case '9/8':
+			return 3
+		case '12/8':
+			return 4
+	}
+}
+
+function nameFromPath(path) {
+	var parts = path.split("/")
+	var nameParts = parts[parts.length - 1].split(".")
+	return nameParts.slice(0,-1).join(".")
+}
+
+
+export  {YouTubeGetID, isYoutubeLink, mapKeySignature, getBeatsPerBar, nameFromPath}

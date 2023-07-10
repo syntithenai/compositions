@@ -1,17 +1,17 @@
 <Song resolves-to="org.jjazz.song.api.Song$SerializationProxy">
   <spVERSION>2</spVERSION>
-  <spName>river - bill staines</spName>
+  <spName>river</spName>
   <spComments>Edit me...</spComments>
   <spTempo>137</spTempo>
   <spClientProperties>
-    <property name="SectionDisplayQuantization-churus*3/4" value="ONE_QUARTER_BEAT"/>
+    <property name="SectionDisplayQuantization-chorus*3/4" value="ONE_QUARTER_BEAT"/>
     <property name="PropCompactViewModeVisibleRps_YamJJazzRhythmProviderID___Cantabile.yjz-ID___3/4" value="rpVariationID,rpIntensityID,RpFillID"/>
-    <property name="SectionDisplayQuantization-_A*3/4" value="ONE_THIRD_BEAT"/>
+    <property name="SectionDisplayQuantization-verse*3/4" value="ONE_QUARTER_BEAT"/>
     <property name="PropSsEditorZoomFactorX" value="100"/>
+    <property name="SectionDisplayQuantization-intro*3/4" value="ONE_THIRD_BEAT"/>
     <property name="SectionDisplayQuantization-A*4/4" value="ONE_QUARTER_BEAT"/>
     <property name="PropCompactViewModeVisibleRps_Cantabile.yjz-ID" value="rpVariationID,rpIntensityID,RpFillID"/>
     <property name="PropCompactViewModeVisibleRps_JazzWaltzSlow.S423.prs-ID" value="rpVariationID,rpIntensityID,RpFillID"/>
-    <property name="SectionDisplayQuantization-A*3/4" value="ONE_QUARTER_BEAT"/>
   </spClientProperties>
   <spTags/>
   <spChordLeadSheet class="org.jjazz.leadsheet.chordleadsheet.ChordLeadSheetImpl" resolves-to="org.jjazz.leadsheet.chordleadsheet.ChordLeadSheetImpl$SerializationProxy">
@@ -19,7 +19,7 @@
     <spItems>
       <org.jjazz.leadsheet.chordleadsheet.item.CLI__SectionImpl resolves-to="org.jjazz.leadsheet.chordleadsheet.item.CLI_SectionImpl$SerializationProxy">
         <spVERSION>1</spVERSION>
-        <spName>_A</spName>
+        <spName>intro</spName>
         <spTs>THREE_FOUR</spTs>
         <spBarIndex>0</spBarIndex>
       </org.jjazz.leadsheet.chordleadsheet.item.CLI__SectionImpl>
@@ -101,7 +101,7 @@
       </org.jjazz.leadsheet.chordleadsheet.item.CLI__ChordSymbolImpl>
       <org.jjazz.leadsheet.chordleadsheet.item.CLI__SectionImpl resolves-to="org.jjazz.leadsheet.chordleadsheet.item.CLI_SectionImpl$SerializationProxy">
         <spVERSION>1</spVERSION>
-        <spName>A</spName>
+        <spName>verse</spName>
         <spTs>THREE_FOUR</spTs>
         <spBarIndex>4</spBarIndex>
       </org.jjazz.leadsheet.chordleadsheet.item.CLI__SectionImpl>
@@ -356,7 +356,7 @@
       </org.jjazz.leadsheet.chordleadsheet.item.CLI__ChordSymbolImpl>
       <org.jjazz.leadsheet.chordleadsheet.item.CLI__SectionImpl resolves-to="org.jjazz.leadsheet.chordleadsheet.item.CLI_SectionImpl$SerializationProxy">
         <spVERSION>1</spVERSION>
-        <spName>churus</spName>
+        <spName>chorus</spName>
         <spTs>THREE_FOUR</spTs>
         <spBarIndex>20</spBarIndex>
       </org.jjazz.leadsheet.chordleadsheet.item.CLI__SectionImpl>

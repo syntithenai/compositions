@@ -134,7 +134,7 @@
         <spTransposition>0</spTransposition>
         <spVelocityShift>0</spVelocityShift>
         <spVolume>81</spVolume>
-        <spPanoramic>64</spPanoramic>
+        <spPanoramic>62</spPanoramic>
         <spReverb>75</spReverb>
         <spChorus>60</spChorus>
         <spPanoramicEnabled>true</spPanoramicEnabled>
@@ -156,7 +156,7 @@
         <spTransposition>0</spTransposition>
         <spVelocityShift>0</spVelocityShift>
         <spVolume>76</spVolume>
-        <spPanoramic>64</spPanoramic>
+        <spPanoramic>62</spPanoramic>
         <spReverb>20</spReverb>
         <spChorus>8</spChorus>
         <spPanoramicEnabled>true</spPanoramicEnabled>

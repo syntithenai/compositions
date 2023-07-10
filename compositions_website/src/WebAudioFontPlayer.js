@@ -1136,7 +1136,7 @@ var WebAudioFontReverberator = /** @class */ (function () {
             me.wet.connect(c);
             c.connect(me.output);
             me.convolver = c;
-            console.log('convolver audioBuffer', audioBuffer);
+            //console.log('convolver audioBuffer', audioBuffer);
         });
     }
     return WebAudioFontReverberator;

@@ -1,19 +1,27 @@
+import { parseArrayBuffer } from 'midi-json-parser';
+
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import icons from './Icons'
 import MIDIFile from './MIDIFile'
 import {useEffect, useRef, useState} from 'react'
-
+import {getBeatsPerBar} from './utils'
+import Metronome from './Metronome'
 
 import {WebAudioFontPlayer} from './WebAudioFontPlayer'
-
+//import {MidiParser} from 'midi-parser-js'
 //console.log(WebAudioFontPlayer)
+//const MidiParser = require('midi-parser-js');
+
+//console.log(MidiParser)
 
 export default function useMidiPlayer(props) {
 		//console.log('start');
 		var audioContext = useRef()
-		
+		const metronomeTimeout = useRef(null)
+		const metronome = useRef(null)
 		var player = useRef();
+		var midiStruct = useRef();
 		var reverberator = null;
 		var equalizer = null;
 		var songStart = useRef();
@@ -26,6 +34,9 @@ export default function useMidiPlayer(props) {
 		var isPlaying = useRef()
 		var song = useRef()
 		var stepDuration = 44 / 1000;
+		var timeSignature = useRef()
+		var tempo = useRef()
+		var beatsPerBar = useRef()
 				
 		var [instrumentVolumes, setInstrumentVolumes] = useState({})
 		var [drumVolumes, setDrumVolumes] = useState({})
@@ -39,6 +50,7 @@ export default function useMidiPlayer(props) {
 		 * Pause playback
 		 **/
 		function pause() {
+			if (metronome.current) metronome.current.stop()
 			if (player.current) player.current.cancelQueue(audioContext.current)
 			isPlaying.current = false
 		}
@@ -47,6 +59,7 @@ export default function useMidiPlayer(props) {
 		 * Stop playback and reset progress
 		 **/
 		function stop() {
+			if (metronome.current) metronome.current.stop()
 			if (player.current) player.current.cancelQueue(audioContext.current)
 			isPlaying.current = false
 			//audioContext.current.currentTime = 0
@@ -56,13 +69,13 @@ export default function useMidiPlayer(props) {
 		 * Seek playback from current position
 		 **/
 		function seek(percent) {
-			console.log(['seek', 'Dur',song.current.duration, 'SStart',songStart.current, 'CurrentTime',currentSongTime.current,  percent, player.current, song.current])
+			//console.log(['seek', 'Dur',song.current.duration, 'SStart',songStart.current, 'CurrentTime',currentSongTime.current,  percent, player.current, song.current])
 			if (player.current && song.current) {
 				player.current.cancelQueue(audioContext.current);
 				var next = song.current.duration * percent / 100;
 				songStart.current = songStart.current + (next - currentSongTime.current);
 				currentSongTime.current = next;
-				console.log(['seeked','Dur',song.current.duration, 'SStart',songStart.current, 'CurrentTime',currentSongTime.current,  percent, next, player.current, song.current])
+				//console.log(['seeked','Dur',song.current.duration, 'SStart',songStart.current, 'CurrentTime',currentSongTime.current,  percent, next, player.current, song.current])
 				if (props.onProgress) props.onProgress(currentSongTime.current/song.current.duration * 100)
 			}
 		}
@@ -71,13 +84,24 @@ export default function useMidiPlayer(props) {
 		 * Start playback 
 		 **/
 		function start() {
-			console.log('start', audioContext.current)
+			//console.log('start',tempo.current, beatsPerBar.current, beatsPerBar.current + 2, audioContext.current)
 			//currentSongTime.current = 0;
 			if (audioContext.current) {
-				songStart.current = audioContext.current.currentTime;
-				nextStepTime = audioContext.current.currentTime;
-				isPlaying.current = true
-				tick();
+				
+				metronome.current = new Metronome(audioContext.current, tempo.current, beatsPerBar.current, beatsPerBar.current + 2	 , function() {
+					//console.log('reset start to ', audioContext.current.currentTime , 1/(tempo.current/60))
+					//setTimeout(function() {
+						currentSongTime.current = 0	
+						songStart.current = audioContext.current.currentTime;
+						nextStepTime = audioContext.current.currentTime;
+						isPlaying.current = true
+						tick();
+					//},1/(tempo.current/60))
+				})
+				////console.log("START METRO", timeSignature.current, tempo.current, beatsPerBar.current)
+				metronome.current.start()
+			} else {
+				console.log('no audio context')
 			}
 		}
 		
@@ -93,9 +117,10 @@ export default function useMidiPlayer(props) {
 				nextStepTime = nextStepTime + stepDuration;
 				
 				if (currentSongTime.current > song.current.duration) {
+					//stop()
 					currentSongTime.current = currentSongTime.current - song.current.duration;
 					sendNotes( songStart.current, 0, currentSongTime.current, input, player);
-					songStart = songStart.current + song.current.duration;
+					songStart.current = songStart.current + song.current.duration;
 				}
 				if (props.onProgress) props.onProgress(currentSongTime.current/song.current.duration * 100)
 			}
@@ -113,12 +138,15 @@ export default function useMidiPlayer(props) {
 		 * Send notes to synth
 		 **/
 		function sendNotes( songStart, start, end, input, player) {
+			//console.log('sendnotes',songStart, start, end)
 			if (song.current) {
 				for (var t = 0; t < song.current.tracks.length; t++) {
 					var track = song.current.tracks[t];
 					for (var i = 0; i < track.notes.length; i++) {
 						if (track.notes[i].when >= start && track.notes[i].when < end) {
 							var when = songStart + track.notes[i].when;
+							var drift = when - audioContext.current.currentTime
+							if (drift > 0.3) when = when - drift + 0.2
 							var duration = track.notes[i].duration;
 							if (duration > 3) {
 								duration = 3;
@@ -126,7 +154,7 @@ export default function useMidiPlayer(props) {
 							var instr = track.info.variable;
 							var v = track.volume / 7;
 							try {
-								console.log('SStart',songStart,'N@', when,  'Norig',track.notes[i].when)
+								//console.log('SStart',songStart,audioContext.current.currentTime , 'N@', when,  'Norig',track.notes[i].when, currentSongTime.current)
 								player.current.queueWaveTable(audioContext.current, input, window[instr], when, track.notes[i].pitch, duration, v, track.notes[i].slides);
 							} catch (e) {console.log(e); stop()}
 						}
@@ -142,7 +170,7 @@ export default function useMidiPlayer(props) {
 							var v = beat.volume / 2;
 							try {
 								player.current.queueWaveTable(audioContext.current, input, window[instr], when, beat.n, duration, v);
-							} catch (e) {console.log(e)}
+							} catch (e) {console.log(e); stop()}
 						}
 					}
 				}
@@ -154,18 +182,35 @@ export default function useMidiPlayer(props) {
 		 **/
 		function loadMidi(path) {
 			var AudioContextFunc = window.AudioContext || window.webkitAudioContext;
-			audioContext.current = new AudioContextFunc();
+			if (!audioContext.current ) audioContext.current = new AudioContextFunc();
 			setMidiPath(path)
-			console.log("LOAD MIDI",path);
+			//console.log("LOAD MIDI",path);
 			var xmlHttpRequest = new XMLHttpRequest();
 			xmlHttpRequest.open("GET", path, true);
 			xmlHttpRequest.responseType = "arraybuffer";
 			xmlHttpRequest.onload = function (e) {
 				var arrayBuffer = xmlHttpRequest.response;
 				var midiFile = new MIDIFile(arrayBuffer);
-				console.log(midiFile)
+				//console.log(midiFile)
 				song.current = midiFile.parseSong();
-				console.log(song.current)
+				//console.log(song.current)
+				
+				
+				parseArrayBuffer(arrayBuffer).then((json) => {
+					// json is the JSON representation of the MIDI file.
+					json.tracks.flatMap((track) => track).map(function(track) {
+						if (!timeSignature.current && track.hasOwnProperty('timeSignature')) {
+							//console.log("TTTTTSS",track.timeSignature)
+							timeSignature.current = track.timeSignature.numerator + "/" + track.timeSignature.denominator
+							beatsPerBar.current = getBeatsPerBar(track.timeSignature.numerator + "/" + track.timeSignature.denominator)
+						} else if (!tempo.current && track.hasOwnProperty('setTempo')) {
+							//console.log("TTTTTSS",track.setTempo.microsecondsPerQuarter)
+							tempo.current = parseInt(60000000/track.setTempo.microsecondsPerQuarter)
+						}
+					})
+					//console.log(timeSignature.current, tempo.current, beatsPerBar.current)
+					
+				});
 				
 				// restore volumes from localStorage if available
 				var v = localStorage.getItem('instrumentVolumes-' + path)
@@ -173,14 +218,14 @@ export default function useMidiPlayer(props) {
 				try {
 					j = JSON.parse(v)
 				} catch (e) {}
-				console.log('getval', v, j)
+				//console.log('getval', v, j)
 			
 				if (j) {
 					setInstrumentVolumes(j)
 					// and player
 					if (song.current.tracks.length == j.length)  {
 						j.forEach(function(volume, trackKey) {
-							console.log('sv',trackKey, volume)
+							//console.log('sv',trackKey, volume)
 							setVolume(trackKey, volume * 100)
 						})
 					}
@@ -238,10 +283,11 @@ export default function useMidiPlayer(props) {
 				player.current.loader.startLoad(audioContext.current, info.url, info.variable);
 			}
 			player.current.loader.waitLoad(function () {
-				console.log('buildControls', song);
+				//console.log('buildControls', song);
 				// load volumes from localStorage
 				
 				//buildControls(song);
+				if (props.onLoaded)  props.onLoaded()
 				start(song)
 				resetEqualizer();
 			});
@@ -251,7 +297,8 @@ export default function useMidiPlayer(props) {
 			var options = {}
 			if (player.current) {
 				for (var i = 0; i < player.current.loader.instrumentKeys().length; i++) {
-					options[i] = player.current.loader.instrumentInfo(i).title;
+					//console.log(player.current.loader.instrumentInfo(i))
+					options[player.current.loader.instrumentInfo(i).variable] = player.current.loader.instrumentInfo(i).title;
 				}
 			}
 			return options
@@ -263,7 +310,7 @@ export default function useMidiPlayer(props) {
 				for (var i = 0; i < player.current.loader.drumKeys().length; i++) {
 					options[i] = player.current.loader.drumInfo(i).title;
 				}
-			}
+			} else {console.log('noplayer')}
 			return options
 		}
 		
@@ -322,11 +369,13 @@ export default function useMidiPlayer(props) {
 		}
 		
 		function setInstrument(trackNumber, instrument) {
+			//console.log('set instr',trackNumber, instrument);
 			if (player.current)  {
 				var info = player.current.loader.instrumentInfo(instrument);
+				//console.log('set instr info',info);
 				player.current.loader.startLoad(audioContext.current, info.url, info.variable);
 				player.current.loader.waitLoad(function () {
-					console.log('loaded');
+					//console.log('loaded');
 					song.current.tracks[trackNumber].info = info;
 					song.current.tracks[trackNumber].id = instrument;
 				});
@@ -336,9 +385,10 @@ export default function useMidiPlayer(props) {
 		function setDrum(trackNumber, instrument) {
 			if (player.current) {
 				var info = player.current.loader.drumInfo(instrument);
+				console.log(info)
 				player.current.loader.startLoad(audioContext.current, info.url, info.variable);
 				player.current.loader.waitLoad(function () {
-					console.log('loaded');
+					//console.log('loaded');
 					song.current.tracks[trackNumber].info = info;
 					song.current.tracks[trackNumber].id = instrument;
 				});

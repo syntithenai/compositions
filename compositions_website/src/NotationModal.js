@@ -7,7 +7,7 @@ import {useEffect, useRef} from 'react'
 import OpenSheetMusicDisplay from './OpenSheetMusicDisplay'
 
 
-export default function NotationModal({notationFile}) {
+export default function NotationModal({notationFile, meta}) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -22,7 +22,7 @@ export default function NotationModal({notationFile}) {
 		  //console.log("OSDM ",e)
 	  //}
   //},[])
-
+var m = meta ? meta  : {}
   return (
     <>
       {!show && <>
@@ -33,6 +33,7 @@ export default function NotationModal({notationFile}) {
 		  <Button variant="danger"  size="lg"  onClick={handleClose}>{icons.music}</Button>
 		  
 		  <Modal dialogClassName="media-modal" show={show} onHide={handleClose} >
+		  	<Modal.Header closeButton ><h3>{m.title}</h3> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>{m.composer}</i></Modal.Header>
 		  	
 		<OpenSheetMusicDisplay file={notationFile} />
 		  </Modal>

@@ -22,6 +22,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import HelpContent from './HelpContent'
 import {YouTubeGetID, isYoutubeLink} from './utils'
 import HomeTile from './HomeTile'
+import XMLParser from 'react-xml-parser';
 
 function App() {
 	
@@ -30,7 +31,6 @@ function App() {
 	var [filter, setFilter] = useState('')
 	var [meta, setMeta] = useState({})
 	var [metaHash, setMetaHash] = useState({})
-	
 	var splits = files.map(function(file) {
 		var fileParts = file.split(" ./")
 		var date = fileParts[0]
@@ -75,7 +75,7 @@ function App() {
 	
 	
 	function loadMeta(name) {
-		console.log("load meta",name, hasMeta(name), meta)
+		//console.log("load meta",name, hasMeta(name), meta)
 		if (hasMeta(name) && !meta[name]) {
 			fetch(metaLinks[name])
 			  .then(function(response) {
@@ -106,7 +106,7 @@ function App() {
 					newMeta[name] = songMeta
 					setMeta(newMeta)
 					setMetaHash(JSON.stringify(newMeta).hashCode())
-					console.log("MM",newMeta)
+					//console.log("MM",newMeta)
 			  })
 				
 		} 
@@ -115,10 +115,94 @@ function App() {
 //  {JSON.stringify(collate)}
 	var buttonStyle={marginBottom:'0.5em', 'border': '1px solid #0d6efd'}
 
+ const [song, setSong] = useState(null)
+  
+	
+	function loadSongStructure(songFile) {
+		//console.log("LSS",name)
+		fetch(songFile)
+		  .then(function(response) {
+			if (!response.ok) {
+				setSong({})
+			  throw new Error('Failed to fetch the structure file.');
+			}
+			return response.text();
+		  })
+		  .then(function(xmlContent) {
+			  var xml = new XMLParser().parseFromString(xmlContent);
+			  	//console.log('RAW')
+			  //console.log(xmlContent)
+			  //console.log('XML')
+			  //console.log(xml)
+			  var currentSection = ""
+			  var sections = {}
+			  var sectionTimeSignatures = {}
+			  var sectionStarts = {}
+			  xml.children[6].children.map(function(a) {return a.children.map(function(c) {
+				  //console.log(c)
+				  if (c.children[1] && c.children[1].name === "spName" && c.children[1].value) {
+						currentSection = c.children[1].value
+						if (!sections.hasOwnProperty(c.children[1].value))  {
+							sections[c.children[1].value] = []
+							sectionTimeSignatures[c.children[1].value] = c.children[2].value
+							sectionStarts[c.children[1].value] = c.children[3].value
+						}
+					}
+					if (currentSection && c.children[1] && c.children[1].name === "spChord") {
+						var chord = (c.children[1] && c.children[1].children && c.children[1].children[1]) ? c.children[1].children[1].value : ''
+						var pos = ''
+						if (currentSection && c.children[2] && c.children[2].name === "spPos") {
+							var pos = (c.children[2] && c.children[2].children && c.children[2].children[1]) ? c.children[2].children[1].value : ''
+						}
+						sections[currentSection].push({chord:chord, pos:pos})
+						
+						//if (currentSection && c.children[2] && c.children[2].name === "spPos") {
+							//var pos = (c.children[2] && c.children[2].children && c.children[2].children[1]) ? c.children[2].children[1].value : ''
+						//}
+					}
+				})})
+			  var layout = xml.children[7].children[1].children.map(function(a) {
+				return {name:a.children[5].value, bars:a.children[6].value}
+			  })
+			  var song = {
+				title: xml.children[1].value,
+				tempo : xml.children[3].value,
+				sections:sections,
+				sectionTimeSignatures:sectionTimeSignatures,
+				sectionStarts:sectionStarts,
+				layout: layout
+			  }
+			  //console.log('SONGSEC')
+			  //console.log(sections)
+			 // collate sections
+			  var collated = {}
+			  Object.keys(song.sections).forEach(function(sectionKey) {
+				  var section = song.sections[sectionKey]
+				  //console.log(section)
+				  collated[sectionKey] = {}
+				  section.forEach(function(chord) {
+						var barNumber = parseInt(chord.pos.replace('[','').replace(']','').split(":")[0]) - song.sectionStarts[sectionKey]
+						var beatNumber = parseInt(chord.pos.replace('[','').replace(']','').split(":")[1])
+						var lineNumber =  parseInt(barNumber / 4)
+						if (!collated[sectionKey].hasOwnProperty(lineNumber)) collated[sectionKey][lineNumber] = {}
+						if (!collated[sectionKey][lineNumber].hasOwnProperty(barNumber)) collated[sectionKey][lineNumber][barNumber] = {}
+						if (!collated[sectionKey][lineNumber][barNumber].hasOwnProperty(beatNumber)) collated[sectionKey][lineNumber][barNumber][beatNumber] = []
+						collated[sectionKey][lineNumber][barNumber][beatNumber].push(chord)
+				  })
+			  })
+			  song.sections = collated
+			  
+			  //console.log('SONG')
+			  //console.log(collated)
+			  setSong(song)
+		  })
+	}
+
+
   return (
     <div className="App">
     <input type='hidden' value={metaHash} />
-		<div style={{float:'left', border: '1px solid blue', padding:'0.5em'}} ><img src="favicon.png" style={{height:'2em'}} />&nbsp;&nbsp;Music By Steve Ryan</div>
+		<div style={{float:'left', border: '1px solid blue', padding:'0.5em', backgroundColor:'#afc6e8'}} ><img src="favicon.png" style={{height:'2em'}} />&nbsp;&nbsp;Music By Steve Ryan</div>
 		<Tabs 
 		  defaultActiveKey="search"
 		  id="app-tabs"
@@ -128,11 +212,11 @@ function App() {
 		  <Tab eventKey="search" title="Search">
 		  	<div><Button size='lg' style={{fontSize:'1.8em' ,marginBottom:'0.5em'}} >{icons.search}</Button><input autoFocus={true	} type='text' value={filter} onChange={function(e) {setFilter(e.target.value)}} style={{fontSize:'1.8em', width: '70%', marginBottom:'0.5em'}} /></div>
 				<Container ><Row> 
-				  {Object.keys(collate).sort().map(function(name) {
+				  {Object.keys(collate).sort().map(function(name, nk) {
 						if (filter && name.indexOf(filter) === -1) {
 							return null	
 						} else {
-							 return <HomeTile collate={collate} name={name} meta={meta} hasMeta={hasMeta} loadMeta={loadMeta} metaLinks={metaLinks} />
+							 return <HomeTile key={nk} collate={collate} name={name} meta={meta} hasMeta={hasMeta} loadMeta={loadMeta} metaLinks={metaLinks} loadSongStructure={loadSongStructure} song={song} />
 						}
 				})}
 				</Row></Container> 
@@ -140,76 +224,7 @@ function App() {
 		  </Tab>
 		  
 		  
-		  <Tab eventKey="recent" title="Recent">
-				<Container >
-				  {
-					  //.sort(function(a,b) {
-					   //console.log('COLLATE',a,b, collate)
-					    
-						//if (a.date < b.date) {
-							//return -1
-						//} else {
-							//return 1
-						//}
-					 //})
-					 splits.filter(function(file) {
-						if (file.type === 'rg' || file.type === 'sng' || file.type === 'mid' || file.type === 'mp3' || file.type === 'xml') {
-							return true
-						} else {
-							return false
-						}
-					 })
-					 .sort(function(a,b) { 
-						if (a.date < b.date) {
-							return 1
-						} else {
-							return -1
-						}
-					 })
-					 .map(function(file) {
-						 
-					 return <Row> <Col style={{border: '2px solid black', padding:'1em', minWidth:'20em'}} ><div style={{float:'right'}}> {file.date ? file.date.replace("_"," ") : ''}</div>
-							{(file.type === 'rg') &&  <span style={{float:'left'}} ><a target='_new' href={file.file} ><Button style={Object.assign(buttonStyle,{marginRight:'1em'})} >{icons.download} Rosegarden</Button></a></span>}
-							
-							{(file.type === 'sng')  &&<span style={{float:'left'}} ><a target='_new' href={file.file} ><Button style={buttonStyle} >{icons.download} JJazzLab</Button></a></span>}
-							{(file.type === 'mid' && file.section === 'rosegarden') && <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle}  ><Button variant="outline-primary" >Midi</Button> <a target='_new' href={file.file} ><Button>{icons.download}</Button></a><PlayerModal midiFile={file.file}  /></ButtonGroup></span>}
-							{(file.type === 'mid' && file.section === 'JJazzLab') && <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-primary" >Backing Midi</Button> <a target='_new' href={file.file} ><Button>{icons.download}</Button></a><PlayerModal midiFile={file.file}  /></ButtonGroup></span>}
-							{(file.type === 'mp3') && <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-primary" >MP3</Button> <a target='_new' href={file.file} ><Button>{icons.download}</Button></a><MediaPlayerModal audioFile={file.file}  /></ButtonGroup></span>}
-							{(file.type === 'xml') && <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-primary" >{icons.musicblue} XML</Button> <a target='_new' href={file.file} ><Button>{icons.download}</Button></a><NotationModal notationFile={file.file}  /></ButtonGroup></span>}
-							 <h3 style={{textTransform:'capitalize'}} >{file.name}</h3>
-						</Col></Row>
-				  })}
-			</Container> 
-		  </Tab>
-		
-		<Tab eventKey="audio" title="Audio">
-				<Container ><Row> 
-				  {Object.keys(collate).sort(function(a,b) {
-						if (a.date < b.date) {
-							return -1
-						} else {
-							return 1
-						}
-					 }).filter(function(a) {
-						 //console.log(collate[a])
-						 for (var b in collate[a]) {
-							 if (collate[a][b].type === 'mp3') return true
-						 }
-						 return false
-						 
-						 //return ((collate[a].type === 'mp3') ? true : false)
-					 }).map(function(name) {
-					   return <Col style={{border: '2px solid black', padding:'1em', minWidth:'20em'}} ><h3 style={{textTransform:'capitalize'}} >{name}</h3>
-						{collate[name].map(function(file) {
-							if (file.type === 'mp3') {
-								return <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-primary" >MP3</Button> <a target='_new' href={file.file} ><Button>{icons.download}</Button></a><MediaPlayerModal audioFile={file.file}  /></ButtonGroup></span>
-							} 
-						})}
-						</Col>
-					
-				  })}
-			</Row></Container> 
-		  </Tab>
+		 
 		  <Tab eventKey="about" title="About">
 				<HelpContent/> 
 		 </Tab>
@@ -237,3 +252,73 @@ export default App;
 								//return <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-primary" >MP3</Button> <a target='_new' href={file.file} ><Button>{icons.download}</Button></a><MediaPlayerModal midiFile={file.file}  /></ButtonGroup></span>
 							//} 
 						//})}
+ //<Tab eventKey="recent" title="Recent">
+				//<Container >
+				  //{
+					  ////.sort(function(a,b) {
+					   ////console.log('COLLATE',a,b, collate)
+					    
+						////if (a.date < b.date) {
+							////return -1
+						////} else {
+							////return 1
+						////}
+					 ////})
+					 //splits.filter(function(file) {
+						//if (file.type === 'rg' || file.type === 'sng' || file.type === 'mid' || file.type === 'mp3' || file.type === 'xml') {
+							//return true
+						//} else {
+							//return false
+						//}
+					 //})
+					 //.sort(function(a,b) { 
+						//if (a.date < b.date) {
+							//return 1
+						//} else {
+							//return -1
+						//}
+					 //})
+					 //.map(function(file, fk) {
+						 
+					 //return <Row key={fk} > <Col style={{border: '2px solid black', padding:'1em', minWidth:'20em'}} ><div style={{float:'right'}}> {file.date ? file.date.replace("_"," ") : ''}</div>
+							//{(file.type === 'rg') &&  <span style={{float:'left'}} ><a target='_new' href={file.file} ><Button style={Object.assign(buttonStyle,{marginRight:'1em'})} >{icons.download} Rosegarden</Button></a></span>}
+							
+							//{(file.type === 'sng')  &&<span style={{float:'left'}} ><a target='_new' href={file.file} ><Button style={buttonStyle} >{icons.download} JJazzLab</Button></a></span>}
+							//{(file.type === 'mid' && file.section === 'rosegarden') && <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle}  ><Button variant="outline-primary" >Midi</Button> <a target='_new' href={file.file} ><Button>{icons.download}</Button></a><PlayerModal midiFile={file.file}  /></ButtonGroup></span>}
+							//{(file.type === 'mid' && file.section === 'JJazzLab') && <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-primary" >Backing Midi</Button> <a target='_new' href={file.file} ><Button>{icons.download}</Button></a><PlayerModal midiFile={file.file}  /></ButtonGroup></span>}
+							//{(file.type === 'mp3') && <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-primary" >MP3</Button> <a target='_new' href={file.file} ><Button>{icons.download}</Button></a><MediaPlayerModal audioFile={file.file}  /></ButtonGroup></span>}
+							//{(file.type === 'xml') && <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-primary" >{icons.musicblue} XML</Button> <a target='_new' href={file.file} ><Button>{icons.download}</Button></a><NotationModal notationFile={file.file}  /></ButtonGroup></span>}
+							 //<h3 style={{textTransform:'capitalize'}} >{file.name}</h3>
+						//</Col></Row>
+				  //})}
+			//</Container> 
+		  //</Tab>
+		
+		//<Tab eventKey="audio" title="Audio">
+				//<Container ><Row> 
+				  //{Object.keys(collate).sort(function(a,b) {
+						//if (a.date < b.date) {
+							//return -1
+						//} else {
+							//return 1
+						//}
+					 //}).filter(function(a) {
+						 ////console.log(collate[a])
+						 //for (var b in collate[a]) {
+							 //if (collate[a][b].type === 'mp3') return true
+						 //}
+						 //return false
+						 
+						 ////return ((collate[a].type === 'mp3') ? true : false)
+					 //}).map(function(name, nk) {
+					   //return <Col key={nk} style={{border: '2px solid black', padding:'1em', minWidth:'20em'}} ><h3 style={{textTransform:'capitalize'}} >{name}</h3>
+						//{collate[name].map(function(file, fk) {
+							//if (file.type === 'mp3') {
+								//return <span key={fk} style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-primary" >MP3</Button> <a target='_new' href={file.file} ><Button>{icons.download}</Button></a><MediaPlayerModal audioFile={file.file}  /></ButtonGroup></span>
+							//} 
+						//})}
+						//</Col>
+					
+				  //})}
+			//</Row></Container> 
+		  //</Tab>
