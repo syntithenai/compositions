@@ -74,7 +74,7 @@ export default function HomeTile({collate, meta, name, loadMeta, hasMeta, metaLi
 		<div style={{float:'left',clear:'both', marginRight:'0.3em', marginTop:'1em', borderTop:'1px solid black', paddingTop:'1em'}} > 
 		 <span style={{marginRight:'0.3em', marginTop:'0.3em', paddingBottom:'0.3em'}} >{notation}</span>
 		 
-		{hasMeta(name) && <span style={{marginRight:'0.3em', marginTop:'0.3em', paddingBottom:'0.3em'}} ><LyricsModal meta={meta[name]} name={name}   loadSongStructure={loadSongStructure} song={song}/></span>}
+		{<span style={{marginRight:'0.3em', marginTop:'0.3em', paddingBottom:'0.3em'}} ><LyricsModal meta={meta[name]} name={name}   loadSongStructure={loadSongStructure} song={song}/></span>}
 		
 		<span style={{marginRight:'0.3em', marginTop:'0.3em', paddingBottom:'0.3em'}}>{chords}</span>
 		</div>

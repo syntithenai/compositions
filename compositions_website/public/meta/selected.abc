@@ -1,5 +1,73 @@
 
 X: 0
+T: Peaceful Easy Feeling
+C:The Eagles
+B: songs
+B: working
+M:4/4
+Q: 1/4=100
+V:1 
+"D"zzzz"Dsus"zzzz||"D"zzzz"Dsus"zzzz||"D"zzzz"Dsus"zzzz||"D"zzzz"Dsus"zzzz||
+"D"zzzzzzzz|"G"zzzzzzzz|"D"zzzzzzzz|"G"zzzzzzzz|
+"D"zzzzzzzz|"G"zzzzzzzz|"A7"zzzzzzzz|"A7"zzzzzzzz|
+"D"zzzzzzzz|"G"zzzzzzzz|"D"zzzzzzzz|"G"zzzzzzzz|
+"D"zzzzzzzz||"G"zzzzzzzz||"A7"zzzzzzzz||"A7"zzzzzzzz||
+"G"zzzzzzzz|"G"zzzzzzzz|"D"zzzzzzzz|"D"zzzzzzzz|
+"G"zzzzzzzz|"G"zzzzzzzz|"Em"zzzzzzzz|"A7"zzzzzzzz|
+"D"zzzzzzzz|"Em"zzzzzzzz|"G"zzzzzzzz|"A7"zzzzzzzz|
+"D"zzzzzzzz|"Dsus"zzzzzzzz|"D"zzzzzzzz|zzzzzzzz|
+W: 
+W: 
+W: Intro
+W: 
+W: 
+W: I like the way your sparkling earrings lay
+W: Against your skin so brown
+W: And I want to sleep with you in the desert tonight
+W: With a million stars all around
+W: 
+W: 
+W: 
+W: CHORUS
+W: 
+W: Cause I got a peaceful easy feeling
+W: And I know you won't let me down
+W: Cause I'm allll-ready standing on the ground
+W: 
+W: 
+W: And I found out a long time ago
+W: What a woman can do to your soul
+W: Ah, but she can't take you any way
+W: You don't already know how to go
+W: 
+W: CHORUS
+W: 
+W: 
+W: I get the feeling I may know you
+W: a lover and a friend
+W: But this voice keeps whispering in my other ear
+W: Tells me I may never see you again
+W: 
+W: CHORUS
+W: 
+% abcbook-tune_id 634b708ee33eb3c0ae731b4e
+% abcbook-tune_composer_id 
+% abcbook-link-0 https://www.youtube.com/watch?v=gWVDjgC0NVA
+% abcbook-link-title-0 Peaceful Easy Feeling (2013 Remaster)
+% abcbook-boost 0
+% abcbook-difficulty 0
+% abcbook-tags charlotte lyngbye,©,vcs2,projects
+% abcbook-tablature 
+% abcbook-transpose 5
+% abcbook-tuning 
+% abcbook-lastupdated 1689087308419
+% abcbook-src-url https://tunebook.net/scrape/songs.abc
+% abcbook-soundfonts 
+% abcbook-repeats 1
+%%MIDI transpose 5
+
+
+X: 1
 T: Green Pastures
 C:Emmylou Harris
 B: songs
@@ -71,7 +139,114 @@ W:
 % abcbook-repeats 1
 
 
-X: 1
+X: 2
+T: River
+C:Bill Staines
+B: songs
+M:4/4
+Q: 1/4=100
+V:1 
+"E"zzzz"A"zzzz|
+"E"zzzzzzzz|
+"F#m"zzzz"B"zzzz|
+"E"zzzzzzzz|
+"B"zzzz"E"zzzz||
+"A"zzzz"E"zzzz|
+"F#m"zzzz"B"zzzz|
+"E"zzzzzzzz|
+"B"zzzz"E"zzzz||
+"E"zzzz"B"zzzz|
+"A"zz"B"zz"A"zz"E"zz|
+"A"zzzzzzzz|
+"E"zzzzzzzz|
+"A"zzzz"B"zzzz|
+"A"zzzz"E"zzzz||
+"A"zzzz"E"zzzz|
+"F#m"zzzzzzzz|
+"B"zzzzzzzz|
+"E"zzzz"A"zzzz|
+"E"zzzzzzzz|
+"B"zzzz"E"zzzz||
+"A"zzzz"E"zzzz|
+"F#m"zzzz"B"zzzz|
+"E"zzzzzzzz|
+"B"zzzz"E"zzzz||
+"E"zzzz"B"zzzz|
+"A"zz"B"zz"A"zz"E"zz|
+"A"zzzzzzzz|
+"E"zzzzzzzz|
+"A"zzzz"B"zzzz|
+"A"zzzz"E"zzzz||
+"A"zzzz"E"zzzz|
+"F#m"zzzz"B"zzzz|
+"E"zzzzzzzz|
+"B"zzzz"E"zzzz||
+"A"zzzz"E"zzzz|
+"F#m"zzzz"B"zzzz|
+"E"zzzzzzzz|
+"B"zzzz"E"zzzz||
+"E"zzzz"B"zzzz|
+"A"zz"B"zz"A"zz"E"zz|
+"A"zzzzzzzz|
+"E"zzzzzzzz|
+"A"zzzz"B"zzzz|
+"A"zzzz"E"zzzz|
+W: I was born on the path of the winter wind
+W: Raised where the mountains are old
+W: The springtime waters came dancing down,
+W: I remember the tales they told.
+W: Well the whistling ways of my younger days
+W: too quickly have faded on by,
+W: And all of my memories linger on
+W: Like the light in the fading sky.
+W: 
+W: Chorus
+W: River take me along in your sunshine sing me a song,
+W: Ever moving, and winding and free,
+W: You rolling old river, you changing old river,
+W: Let's you and me river, run down to the sea.
+W: 
+W: Well I've been to the city and I've been back again,
+W: I've been moved by some things that I've learned,
+W: Met a lot of good people and I called them friends,
+W: Felt the change when the seasons turned.
+W: I've heard all of the songs that the children sing
+W: And listened to love's melodies,
+W: Felt my own music within me rise,
+W: Like the wind in the Autumn breeze..
+W: 
+W: Chorus
+W: Well some day when the flowers are blooming still,
+W: Some day when the grass is still green,
+W: The rolling waters will round me bend and flow into the open sea.
+W: So here's to the rainbow that's followed me here
+W: And here's to the friends that I know,
+W: And here's to the song that's within me now,
+W: I will sing it where e're I go.
+W: 
+W: Last Chorus
+W: 
+W: Repeat: You rolling old river, you changing old river
+W: let's you and me river........ hold run down to the
+W: sea slow
+W: Can have one person saying you rolling old river, other person says you
+W: changing old river.
+W: 
+% abcbook-tune_id 634b708eeedc2b3745a0c8a3
+% abcbook-tune_composer_id 
+% abcbook-boost 0
+% abcbook-difficulty 0
+% abcbook-tags charlotte lyngbye,©,vcs2,projects
+% abcbook-tablature 
+% abcbook-transpose 
+% abcbook-tuning 
+% abcbook-lastupdated 1689087334870
+% abcbook-src-url https://tunebook.net/scrape/songs.abc
+% abcbook-soundfonts 
+% abcbook-repeats 1
+
+
+X: 3
 T: Wasted On The Way
 C:Crosby, Stills and Nash
 B: songs
@@ -150,7 +325,7 @@ W: Let the water come and carry us away
 % abcbook-repeats 1
 
 
-X: 2
+X: 4
 T: Come On Up To The House
 C:Tom Waits
 B: songs
@@ -262,7 +437,7 @@ W: yeah
 % abcbook-repeats 1
 
 
-X: 3
+X: 5
 T: Sexy Saxophone
 C:Steve Ryan
 B: songs
@@ -308,7 +483,93 @@ W: riff then chord
 % abcbook-repeats 1
 
 
-X: 4
+X: 6
+T: Ars Facere
+C:Steve Ryan
+B: working
+B: songs
+M:4/4
+Q: 1/4=100
+K:Dm
+V:1 
+"Dm"F2FEGEE2|E2G2G2F2|F2FEGEE2|E2G2F4:|
+"Dm"a2 ab ag f2|f2a2"Gm"g2d2|f2g2aba2|agf2"Dm"gfd2|
+"Dm"a2 ab ag f2|f2fa "Gm"g2d2|f2g2a2ab|afef  "Dm"d4||
+"Gm"f3e gee2|e2g2"Dm"g2f2|"Gm"f3e gee2|e2g2"Dm"g2f2:| 
+V:2 
+A2AGBGG2|G2B2B2A2|A2AGBGG2|G2B2A4:|
+f2 fg fe d2|d2f2 e2c2|d2e2fgf2|fed2edB2|
+f2 fg fe d2|f2fa g2d2|f2g2a2ab|afef  d4||
+f3e gee2|e2g2g2f2|f3e gee2|e2g2g2f2:|
+W: Verse 1:
+W: Ab initio creationis	(	From the moment of creation	)
+W: ars artificem incipit,	(	The artist's work begins	)
+W: manu habilis dedicatione	(	A skillful hand with dedication	)
+W: nunquam finem imponit.	(	Creates art that never ends	)
+W: 
+W: Chorus:
+W: Ars facere, ars creandi	(	Ars facere, the art of making	)
+W: pulchritudinem manibus hominum	(	Beauty from the hands of man	)
+W: artificium , quod capiendi	(	Craft and artistry, a heart's undertaking	)
+W: omnia creans quae fieri possunt.	(	Crafting all that we can	)
+W: 
+W: Verse 2:
+W: Cum pincelis ictum singulis	(	With each stroke of the brush	)
+W: aut argilla formata	(	Or the shaping of the clay	)
+W: artifex effert cum fide	(	The artist brings forth a rush	)
+W: pulchritudinem quae manet.	(	Of beauty that will stay	)
+W: 
+W: Chorus:
+W: Ars facere, ars creandi	(	Ars facere, the art of making	)
+W: pulchritudinem manibus hominum	(	Beauty from the hands of man	)
+W: artificium , quod capiendi	(	Craft and artistry, a heart's undertaking	)
+W: omnia creans quae fieri possunt.	(	Crafting all that we can	)
+W: 
+W: Verse 3:
+W: In textrina tapete	(	From the weaver's tapestry	)
+W: et fabri igne et ferro	(	To the blacksmith's forge and fire	)
+W: ars atque artificium,	(	Each piece of artistry	)
+W: productum voluntatis.	(	Is the product of desire	)
+W: 
+W: Chorus:
+W: Ars facere, ars creandi	(	Ars facere, the art of making	)
+W: pulchritudinem manibus hominum	(	Beauty from the hands of man	)
+W: artificium , quod capiendi	(	Craft and artistry, a heart's undertaking	)
+W: omnia creans quae fieri possunt.	(	Crafting all that we can	)
+W: 
+W: Bridge:
+W: In singulis operibus artis	(	In each work of art, we find	)
+W: creatio mentis creatoris est,	(	The soul of the creator's mind	)
+W: et in pulchritudine quam aspeximus,	(	And in that beauty, we behold	)
+W: eternam artem contexere videmus.	(	The art that never grows old	)
+W: 
+W: Chorus:
+W: Ars facere, ars creandi	(	Ars facere, the art of making	)
+W: pulchritudinem manibus hominum	(	Beauty from the hands of man	)
+W: artificium , quod capiendi	(	Craft and artistry, a heart's undertaking	)
+W: omnia creans quae fieri possunt.	(	Crafting all that we can	)
+W: 
+W: Outro:
+W: Ab initio creationis	(	From the moment of creation	)
+W: usque ad finem vitae	(	To the end of all our days	)
+W: in arte quaesitum pulchrum inveniemus	(	We'll find beauty in the art that we've made	)
+W: manu nostra peritia semper.	(	Through the skill of our hands, always.	)
+% abcbook-tune_id 6460d4284b7148824fe6a7a8
+% abcbook-tune_composer_id 
+% abcbook-link-0 https://syntithenai.github.io/abc2book_free_music/steve ryan/ars facere.m4a
+% abcbook-boost 3
+% abcbook-difficulty 1
+% abcbook-tags candelo songwriters,steve ryan originals,steve ryan,test,vcs,projects
+% abcbook-tablature 
+% abcbook-transpose 
+% abcbook-tuning 
+% abcbook-lastupdated 1689075292923
+% abcbook-src-url 
+% abcbook-soundfonts 
+% abcbook-repeats 1
+
+
+X: 7
 T: Clawhammer
 C:Steve Ryan
 B: working
@@ -393,7 +654,7 @@ W: The showdown awaits, Bond holds fate in his hand
 % abcbook-repeats 1
 
 
-X: 5
+X: 8
 T: Robbery
 C:steve ryan
 B: working
@@ -442,9 +703,97 @@ W: Life sux, and it's awesome as hell
 % abcbook-repeats 1
 
 
-X: 6
+X: 9
+T: Journey Home
+C:Charlotte Lyngbye
+B: working
+B: songs
+M:4/4
+Q: 1/4=100
+V:1 
+"Am"zzzzzzzz|
+"C"zzzzzzzz|
+"A#"zzzzzzzz|
+"Am"zzzzzzzz||zzzzzzzz||zzzzzzzz||"G"zzzzzzzz||
+"C"zzzzzzzz|
+"G"zzzzzzzz|
+"Dm"zzzzzzzz|
+"Am"zzzzzzzz||zzzzzzzz||zzzzzzzz||"G"zzzzzzzz||
+"C"zzzzzzzz|
+"Am"zzzzzzzz|
+"F"zzzzzzzz|zzzzzzzz|"G"zzzzzzzz|
+"Am"zzzzzzzz|
+W: My tired old eyes are straightening
+W: Squinting in the yellowing light
+W: Tired and worn out I'm headed south
+W: 
+W: Following those white lines
+W: As I drive into the night
+W: I'm drying at the corners of my mouth
+W: 
+W: My windscreens gone OK
+W: But splatters mar my sight
+W: But I see the emerging of the ?fool?
+W: 
+W: Don't have long to go now
+W: A journey through the night
+W: I promise I'll be coming home soon
+W: 
+W: I'm tired of motorway food
+W: Tired of mouldy motel rooms
+W: And the stink of musty old bedspreads
+W: 
+W: I've had it with bad coffee
+W: And with highway exhaust fumes
+W: Fed up with backward small town boneheads
+W: 
+W: I roll my window down ?a slide?
+W: Roll into some random branch of the town
+W: Stop for fuel in the middle of nowhere
+W: 
+W: Try to buy myself a meal
+W: But settle for a chips and burger deal
+W: It's dry and tasteless so no suprises
+W: 
+W: It's enough to keep me moving
+W: To get me through until the dawn
+W: It's been weeks since the last time I shot through
+W: 
+W: And my radio is soothing
+W: While I drive until the morn
+W: As I'm heading home, heading home to you.
+W: 
+W: Heading home, heading home, I'm heading home, heading home to you
+W: Heading home, heading home, I'm heading home, heading home to you
+W: 
+W: 
+W: I'm tired of motorway food
+W: Tired of mouldy motel rooms
+W: And the stink of musty old bedspreads
+W: 
+W: I've had it with bad coffee
+W: And with highway exhaust fumes
+W: Fed up with backward small town boneheads
+W: 
+W: INSTR
+% abcbook-tune_id 648cfdae089bede2bb392bce
+% abcbook-tune_composer_id 
+% abcbook-link-0 https://syntithenai.github.io/abc2book_free_music/charlotte%20lyngbye/journey%20home.m4a
+% abcbook-boost 0
+% abcbook-difficulty 0
+% abcbook-tags candelo songwriters,charlotte lyngbye,charlotte lyngbye originals,projects
+% abcbook-tablature 
+% abcbook-transpose 
+% abcbook-tuning 
+% abcbook-lastupdated 1689087294242
+% abcbook-src-url 
+% abcbook-soundfonts 
+% abcbook-repeats 1
+
+
+X: 10
 T: Cowboy Boogie
-C:steve ryan
+C:Steve Ryan
 B: songs
 B: working
 M:4/4
@@ -503,14 +852,14 @@ W:
 % abcbook-tablature 
 % abcbook-transpose 5
 % abcbook-tuning 
-% abcbook-lastupdated 1687922185875
+% abcbook-lastupdated 1689087377132
 % abcbook-src-url 
 % abcbook-soundfonts 
 % abcbook-repeats 1
 %%MIDI transpose 5
 
 
-X: 7
+X: 11
 T: Mesi Bondye
 C:Leyla McCalla
 B: working

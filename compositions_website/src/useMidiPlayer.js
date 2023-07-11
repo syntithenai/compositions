@@ -191,9 +191,9 @@ export default function useMidiPlayer(props) {
 			xmlHttpRequest.onload = function (e) {
 				var arrayBuffer = xmlHttpRequest.response;
 				var midiFile = new MIDIFile(arrayBuffer);
-				//console.log(midiFile)
+				console.log(midiFile)
 				song.current = midiFile.parseSong();
-				//console.log(song.current)
+				console.log(song.current)
 				
 				
 				parseArrayBuffer(arrayBuffer).then((json) => {
@@ -241,7 +241,7 @@ export default function useMidiPlayer(props) {
 					// and player
 					if (song.current.beats.length == j.length)  {
 						j.forEach(function(volume, trackKey) {
-							console.log('svd',trackKey, volume)
+							//console.log('svd',trackKey, volume)
 							setDrumVolume(trackKey, volume * 100)
 						})
 					}
@@ -330,7 +330,9 @@ export default function useMidiPlayer(props) {
 		}
 		
 		function getTrackInstruments() {
-			return song.current && Array.isArray(song.current.tracks) ? song.current.tracks.map(function(t) {return t && t.info ? t.info.title : ''}) : []
+			return song.current && Array.isArray(song.current.tracks) ? song.current.tracks.sort(function(a,b) {
+				return (a.n < b.n) ? -1 : 1
+			}).map(function(t) {return t && t.info ? t.info.title : ''}) : []
 		}
 		
 		function getTrackDrums() {

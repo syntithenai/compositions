@@ -107,22 +107,15 @@ export default function PlayerModal({midiFile, meta, loadSongStructure , song, n
 			</div>
 			<hr/>
 			{drumOptions.length > 0 && <div>
-				<h4 style={{float:'left', marginTop:'0.5em', width: '14em'}}>Drums</h4> &nbsp;&nbsp;&nbsp;
-				<input type="range" value={drumVolume} onChange={function(e) {
+				<h4 style={{float:'left',  width: '14em'}}>Drums</h4> &nbsp;&nbsp;&nbsp;<input style={{float:'left', marginTop:'0.5em', width: '50%'}} type="range" value={drumVolume} onChange={function(e) {
 					setDrumVolume(e.target.value)
 					drumOptions.forEach(function(instrument, instrumentKey) {
 						midiPlayer.setDrumVolume(instrumentKey, e.target.value)
 					})
-				} }  style={{float:'left', width:'50%'}} /></div>}
-			<div>
-			{drumOptions.map(function(instrument, instrumentKey) {
-				return <div key={instrumentKey} style={{clear:'both', height:'2em'}} >
-					<div style={{float:'left', width: '20em', fontWeight:'bold'}}>
-						{instrument}
-					</div> 
-					 <input type="range" value={midiPlayer.getTrackDrumVolume(instrumentKey)} onChange={function(e) {midiPlayer.setDrumVolume(instrumentKey, e.target.value)} }  style={{float:'left', width:'50%'}} /></div>
-			})}
-			</div>
+				} }  style={{float:'left', width:'50%'}} />
+				</div>}
+			
+			
 			{drumOptions.length > 0 && <hr/>}
 			<div style={{float:'right', border:'1px solid black', padding:'0.5em'}} >
 		  	 <ChordsLayout song={song} />
@@ -138,6 +131,14 @@ export default function PlayerModal({midiFile, meta, loadSongStructure , song, n
     </>
   );
 }
+//{drumOptions.map(function(instrument, instrumentKey) {
+				//return <div key={instrumentKey} style={{clear:'both', height:'2em'}} >
+					//<div style={{float:'left', width: '20em', fontWeight:'bold'}}>
+						//{instrument}
+					//</div> 
+					 //<input type="range" value={midiPlayer.getTrackDrumVolume(instrumentKey)} onChange={function(e) {midiPlayer.setDrumVolume(instrumentKey, e.target.value)} }  style={{float:'left', width:'50%'}} /></div>
+			//})}
+			//
 //<select value={midiPlayer.getTrackDrum(instrumentKey)} onChange={function(e) {
 							//console.log('SET',instrumentKey, e.target.value)
 							//midiPlayer.setDrum(instrumentKey, e.target.value)

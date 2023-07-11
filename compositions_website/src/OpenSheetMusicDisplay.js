@@ -25,12 +25,12 @@ class OpenSheetMusicDisplay extends Component {
 			drawCredits: false
 		  }
 		  this.osmd = new OSMD(this.divRef.current, options);
-		  console.log(this.osmd)
+		  //console.log(this.osmd)
 		  this.osmd.load(this.props.file).then(() => {
 			  this.isLoaded.current = true
-			  console.log('loaded',this.isRendered, this)
+			  //console.log('loaded',this.isRendered, this)
 			  if (!this.isRendered.current) {
-				  console.log('render')
+				  //console.log('render')
 				  //this.divRef.innerHTML = null
 				  try {
 					this.osmd.render()
