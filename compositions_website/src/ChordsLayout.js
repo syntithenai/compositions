@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 export default function ChordsLayout({song, fontSize}) {
 	var haveRendered = {}
 	var lastRenderedChord = ''
+	var lastTimeSignature = ''
 	return <div>
 	 {song ? song.layout.map(function(l, lk) {
 				if (!haveRendered[l.name]) {
@@ -14,19 +15,22 @@ export default function ChordsLayout({song, fontSize}) {
 					return <div key={lk} style={{border:'1px solid black', padding:'1em', fontSize:fontSize ? fontSize : '1.4em'}} >
 						<div style={{marginBottom:'0.5em'}} ><span style={{fontWeight:'bold'}} >{l.name}</span><span style={{fontStyle:'italic', marginLeft:'1em'}} >{mapKeySignature(song.sectionTimeSignatures[l.name])}</span></div>
 						{song.sections[l.name] && <Container	>{Object.keys(song.sections[l.name]).map(function(barChordsKey ,rk) {
+							lastTimeSignature = ''
 							var barChordsLine = song.sections[l.name][barChordsKey]
 							var lastRowLength  = Object.keys(barChordsLine).length
 							var extraCols = []
 							if (lastRowLength < 4) {
 								for (let i = 1; i <= (4-lastRowLength); i++) {
-									extraCols.push(<Col key={'b'+i} style={{marginLeft:'0.5em',padding:'0.3em',backgroundColor:'white'}} ></Col>)
+									extraCols.push(<Col key={'b'+i} style={{marginBottom:'0.5em',marginLeft:'0.5em',padding:'0.3em',backgroundColor:'grey', border:'1px solid black'}} ></Col>)
 								}
 							}
 							return <Row key={rk} style={{ height:'3em'}} >{Object.keys(barChordsLine).map(function(beatKey, bck) {
 								var beat = barChordsLine[beatKey]
 								
 								return <Col key={bck} style={{marginBottom:'0.5em',marginLeft:'0.5em',padding:'0.3em',backgroundColor:'grey', border:'1px solid black'}} >{Object.keys(beat).map(function(beatKey , bk) {
-									return <span key={bk} style={{marginLeft:'0.5em',border:'1px solid black', backgroundColor:'lightblue', padding:'0.3em', borderRadius:'5px'}} >{beat[beatKey].map(function(chord, ck) {
+									
+									
+									return <span key={bk} style={{marginLeft:'0.5em',border:'1px solid black', backgroundColor:'lightblue', paddingLeft:'0.3em', borderRadius:'5px'}} >{beat[beatKey].map(function(chord, ck) {
 										if (!chord.chord) {
 											return <span key={ck} style={{ border:'1px solid black', backgroundColor:'#45e3e3', padding:'0.3em', borderRadius:'5px', fontWeight:'bold'}} >{lastRenderedChord}</span>
 										} else {

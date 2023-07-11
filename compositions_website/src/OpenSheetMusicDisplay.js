@@ -11,21 +11,27 @@ class OpenSheetMusicDisplay extends Component {
       this.divRef = React.createRef();
       //this.rendered = useRef();
       this.isRendered = React.createRef(false)
+      this.isLoaded = React.createRef(false)
+      //var l = false
     }
   
     setupOsmd() {
-		if (this.props.file) {
+		if (this.props.file && !this.isLoaded.current) {
+			this.isLoaded.current = true
+			//l = true
 		  const options = {
 			autoResize: this.props.autoResize !== undefined ? this.props.autoResize : true,
-			drawTitle: this.props.drawTitle !== undefined ? this.props.drawTitle : true,
+			//drawTitle: this.props.drawTitle !== undefined ? this.props.drawTitle : true,
+			drawCredits: false
 		  }
 		  this.osmd = new OSMD(this.divRef.current, options);
 		  console.log(this.osmd)
 		  this.osmd.load(this.props.file).then(() => {
-			  console.log('loaded',this.isRendered)
+			  this.isLoaded.current = true
+			  console.log('loaded',this.isRendered, this)
 			  if (!this.isRendered.current) {
 				  console.log('render')
-				  
+				  //this.divRef.innerHTML = null
 				  try {
 					this.osmd.render()
 					this.isRendered.current = true

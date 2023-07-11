@@ -20,7 +20,7 @@ import LyricsModal from './LyricsModal'
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import HelpContent from './HelpContent'
-import {YouTubeGetID, isYoutubeLink} from './utils'
+import {YouTubeGetID, isYoutubeLink, getBeatsPerBar, mapKeySignature} from './utils'
 import HomeTile from './HomeTile'
 import XMLParser from 'react-xml-parser';
 
@@ -72,26 +72,26 @@ function App() {
 		return metaLinks.hasOwnProperty(name) ? true : false
 	}
 	
-	
-	
-	function loadMeta(name) {
+	function loadAllMeta() {
 		//console.log("load meta",name, hasMeta(name), meta)
-		if (hasMeta(name) && !meta[name]) {
-			fetch(metaLinks[name])
-			  .then(function(response) {
-				if (!response.ok) {
-				  throw new Error('Failed to fetch the ABC file.');
-				}
-				return response.text();
-			  })
-			  .then(function(abcContent) {
-				  
-				  	var lines = abcContent.split("\n")
+		fetch("meta/selected.abc")
+		  .then(function(response) {
+			if (!response.ok) {
+			  throw new Error('Failed to fetch the ABC file.');
+			}
+			return response.text();
+		  })
+		  .then(function(abcContentAll) {
+			    var meta = {}
+			    abcContentAll.split("\n\n\n").map(function(abcContent) {
+					var lines = abcContent.split("\n")
+					var name = ''
 					var songMeta = {'lyrics':[], 'links':[]}
 					//console.log(lines)
 					lines.forEach(function(line) {
 						if (line.startsWith('T:')) {
 							songMeta['title'] = line.slice(2)
+							name = line.slice(2).toLowerCase().trim()
 						} else if (line.startsWith('C:')) {
 							songMeta['composer'] = line.slice(2)
 						} else if (line.startsWith('W:')) {
@@ -102,14 +102,56 @@ function App() {
 						
 						
 					})
-					var newMeta = meta
-					newMeta[name] = songMeta
-					setMeta(newMeta)
-					setMetaHash(JSON.stringify(newMeta).hashCode())
-					//console.log("MM",newMeta)
-			  })
+					if (name) meta[name] = songMeta
+				})
+				//console.log('LAM',meta)
+				setMeta(meta)
+				setMetaHash(JSON.stringify(meta).hashCode())
+		  })
+			
+	
+	}
+	useEffect(function() {
+		loadAllMeta()
+	},[])
+	
+	
+	function loadMeta(name) {
+		//console.log("load meta",name, hasMeta(name), meta)
+		//if (hasMeta(name) && !meta[name]) {
+			//fetch(metaLinks[name])
+			  //.then(function(response) {
+				//if (!response.ok) {
+				  //throw new Error('Failed to fetch the ABC file.');
+				//}
+				//return response.text();
+			  //})
+			  //.then(function(abcContent) {
+				  
+				  	//var lines = abcContent.split("\n")
+					//var songMeta = {'lyrics':[], 'links':[]}
+					////console.log(lines)
+					//lines.forEach(function(line) {
+						//if (line.startsWith('T:')) {
+							//songMeta['title'] = line.slice(2)
+						//} else if (line.startsWith('C:')) {
+							//songMeta['composer'] = line.slice(2)
+						//} else if (line.startsWith('W:')) {
+							//songMeta['lyrics'].push(line.slice(2))
+						//}  else if (line.startsWith('% abcbook-link') && !line.startsWith('% abcbook-link-title')) {
+							//songMeta['links'].push(line.slice(17))
+						//} 
+						
+						
+					//})
+					//var newMeta = meta
+					//newMeta[name] = songMeta
+					//setMeta(newMeta)
+					//setMetaHash(JSON.stringify(newMeta).hashCode())
+					////console.log("MM",newMeta)
+			  //})
 				
-		} 
+		//} 
 	}
 	
 //  {JSON.stringify(collate)}
@@ -185,7 +227,14 @@ function App() {
 						var beatNumber = parseInt(chord.pos.replace('[','').replace(']','').split(":")[1])
 						var lineNumber =  parseInt(barNumber / 4)
 						if (!collated[sectionKey].hasOwnProperty(lineNumber)) collated[sectionKey][lineNumber] = {}
-						if (!collated[sectionKey][lineNumber].hasOwnProperty(barNumber)) collated[sectionKey][lineNumber][barNumber] = {}
+						if (!collated[sectionKey][lineNumber].hasOwnProperty(barNumber)) {
+							collated[sectionKey][lineNumber][barNumber] = {}
+							var bpb = getBeatsPerBar(mapKeySignature(song.sectionTimeSignatures[sectionKey]))
+							//console.log(song.sectionTimeSignatures[sectionKey], bpb)
+							for (var m=0; m < bpb; m++) {
+								collated[sectionKey][lineNumber][barNumber][m] = []
+							}
+						}
 						if (!collated[sectionKey][lineNumber][barNumber].hasOwnProperty(beatNumber)) collated[sectionKey][lineNumber][barNumber][beatNumber] = []
 						collated[sectionKey][lineNumber][barNumber][beatNumber].push(chord)
 				  })

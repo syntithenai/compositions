@@ -247,10 +247,9 @@ export default function useMidiPlayer(props) {
 					}
 				}
 				
-				
 		 
 				
-				startLoad(song.current	);
+				startLoad(song.current	, path);
 			};
 			xmlHttpRequest.send(null);
 		}
@@ -258,7 +257,7 @@ export default function useMidiPlayer(props) {
 		/** 
 		 * Load instruments for this song
 		 **/
-		function startLoad(song) {
+		function startLoad(song, path) {
 			//console.log("STL",song, player.current);
 			player.current = new WebAudioFontPlayer();
 			equalizer = player.current.createChannel(audioContext.current);
@@ -285,6 +284,22 @@ export default function useMidiPlayer(props) {
 			player.current.loader.waitLoad(function () {
 				//console.log('buildControls', song);
 				// load volumes from localStorage
+				// restore instruments from localStorage if available
+				var v = localStorage.getItem('instrumentSelection-' + path)
+				var j = null
+				try {
+					j = JSON.parse(v)
+				} catch (e) {}
+				//console.log('getval', v, j)
+			
+				if (j) {
+					if (song.tracks.length == j.length)  {
+						j.forEach(function(instrument, trackKey) {
+							//console.log('load instr',trackKey, instrument)
+							setInstrument(trackKey, instrument)
+						})
+					}
+				}
 				
 				//buildControls(song);
 				if (props.onLoaded)  props.onLoaded()
@@ -378,6 +393,10 @@ export default function useMidiPlayer(props) {
 					//console.log('loaded');
 					song.current.tracks[trackNumber].info = info;
 					song.current.tracks[trackNumber].id = instrument;
+					if (midiPath && song.current && Array.isArray(song.current.tracks)) {
+						localStorage.setItem('instrumentSelection-' + midiPath, JSON.stringify(song.current.tracks.map(function(t) {  return t.id})))
+					}
+
 				});
 			}
 		}
