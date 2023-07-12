@@ -113,6 +113,10 @@ function App() {
 	}
 	useEffect(function() {
 		loadAllMeta()
+		window.addEventListener('beforeunload', (e) => {
+		  console.log('User clicked back button');
+		  return false
+		});
 	},[])
 	
 	

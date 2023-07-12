@@ -117,7 +117,7 @@ export default function PlayerModal({midiFile, meta, loadSongStructure , song, n
 			
 			
 			{drumOptions.length > 0 && <hr/>}
-			<div style={{float:'right', border:'1px solid black', padding:'0.5em'}} >
+			<div  className="optional-chords" style={{float:'right', border:'1px solid black', padding:'0.5em'}} >
 		  	 <ChordsLayout song={song} />
 		  	 </div>
 			{(meta && meta.lyrics) && <div style={{margin:'1em', fontSize:'1.7em'}} >{meta.lyrics.map(function(l, lk) {

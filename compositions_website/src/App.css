@@ -2,17 +2,25 @@
   text-align: center;
 }
 .media-modal {
-    width: 90vw;
-    max-width: 90vw;
+    width: 97vw;
+    max-width: 97vw;
+    margin-top: 0px;
 } 
 .media-modal-full {
-    width: 95vw;
-    max-width: 95vw;
+    width: 97vw;
+    max-width: 97vw;
+    margin-top: 0px;
 } 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
+
+@media screen and (max-width: 1024px) {
+	.optional-chords {
+	   display: none;
+	}
+ }
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

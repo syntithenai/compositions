@@ -34,7 +34,7 @@ export default function PlayerModal({audioFile, meta, name, song, loadSongStruct
 		    <Modal.Body>
 		  	<audio style={{padding:'1em', width:'90%'}} src={audioFile} controls={true} autoPlay={true} />
 		    
-		    <div style={{width:'30%', float:'right', border:'1px solid black', padding:'0.5em'}} >
+		    <div  className="optional-chords" style={{width:'30%', float:'right', border:'1px solid black', padding:'0.5em'}} >
 		  	 <ChordsLayout song={song} />
 		  	 </div>
 		  	 

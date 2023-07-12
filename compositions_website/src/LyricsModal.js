@@ -28,7 +28,7 @@ var m = meta ? meta  : {}
 		  <Modal dialogClassName="media-modal-full" show={show} onHide={handleClose} >
 			<Modal.Header closeButton ><h3>{m.title}</h3> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>{m.composer}</i></Modal.Header>
 			<Modal.Body >
-			 <div style={{float:'right', border:'1px solid black', padding:'0.5em'}} >
+			 <div className="optional-chords" style={{float:'right', border:'1px solid black', padding:'0.5em'}} >
 		  	 <ChordsLayout song={song} />
 		  	 </div>
 		  	{(meta && meta.lyrics) && <div style={{margin:'1em', fontSize:'1.7em'}} >{meta.lyrics.map(function(l,lk) {

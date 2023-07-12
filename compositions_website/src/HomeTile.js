@@ -35,7 +35,7 @@ export default function HomeTile({collate, meta, name, loadMeta, hasMeta, metaLi
 				//buttons.push(<PlayerModal midiFile={file.file}  />)
 				//return <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-primary" >Backing Midi</Button> <a target='_new' href={file.file} ><Button size="lg" >{icons.download}</Button></a><PlayerModal midiFile={file.file}  /></ButtonGroup></span>
 			} else if (file.type === 'mp3') {
-				downloads.push(<a target='_new' href={file.file} ><Button size="lg" variant="success" >{icons.download} MP3</Button></a>)
+				downloads.push(<a target='_new' href={file.file} ><Button size="lg" variant="success" >{icons.download} MP3 {nameFromPath(file.file)}</Button></a>)
 				buttons.push(<MediaPlayerModal audioFile={file.file}  name={name}  meta={meta[name]} loadSongStructure={loadSongStructure} song={song} />)
 				//return <span style={{float:'left'}} ><ButtonGroup  style={buttonStyle} ><Button variant="outline-success" >MP3</Button> <a target='_new' href={file.file} ><Button size="lg" variant="success" >{icons.download}</Button></a><MediaPlayerModal audioFile={file.file}  /></ButtonGroup></span>
 			} else if (file.type === 'xml') {
