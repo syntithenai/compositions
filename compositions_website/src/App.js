@@ -113,10 +113,7 @@ function App() {
 	}
 	useEffect(function() {
 		loadAllMeta()
-		window.addEventListener('beforeunload', (e) => {
-		  console.log('User clicked back button');
-		  return false
-		});
+		
 	},[])
 	
 	
@@ -184,9 +181,13 @@ function App() {
 			  var sections = {}
 			  var sectionTimeSignatures = {}
 			  var sectionStarts = {}
+			  var chordLookups = {}
+			  // iterate chords
+			  var chordIndex = 1
 			  xml.children[6].children.map(function(a) {return a.children.map(function(c) {
 				  //console.log(c)
-				  if (c.children[1] && c.children[1].name === "spName" && c.children[1].value) {
+				  // for each chord
+				   if (c.children[1] && c.children[1].name === "spName" && c.children[1].value) {
 						currentSection = c.children[1].value
 						if (!sections.hasOwnProperty(c.children[1].value))  {
 							sections[c.children[1].value] = []
@@ -196,17 +197,71 @@ function App() {
 					}
 					if (currentSection && c.children[1] && c.children[1].name === "spChord") {
 						var chord = (c.children[1] && c.children[1].children && c.children[1].children[1]) ? c.children[1].children[1].value : ''
-						var pos = ''
-						if (currentSection && c.children[2] && c.children[2].name === "spPos") {
-							var pos = (c.children[2] && c.children[2].children && c.children[2].children[1]) ? c.children[2].children[1].value : ''
+						if (chord) {
+							//console.log(chord)
+							chordLookups[chordIndex] = chord
+							var pos = ''
+							if (currentSection && c.children[2] && c.children[2].name === "spPos") {
+								pos = (c.children[2] && c.children[2].children && c.children[2].children[1]) ? c.children[2].children[1].value : ''
+							}
+							chordIndex = chordIndex + 1
+							sections[currentSection].push({chord:chord, pos:pos})
+							//console.log("COK",chord, chordIndex, pos)
+						} else {
+							//console.log(c.children[1])
+							if (c.children[1].attributes.reference) {
+								if (currentSection && c.children[2] && c.children[2].name === "spPos") {
+									var pos = (c.children[2] && c.children[2].children && c.children[2].children[1]) ? c.children[2].children[1].value : ''
+									var pa = c.children[1].attributes.reference.split('ChordSymbolImpl[')
+									var pb = pa[1].split("]")
+									var index = pb[0]
+									//console.log('CREF', index, chordIndex, pos)
+									
+									sections[currentSection].push({chordRef:index, pos:pos})
+									chordIndex = chordIndex + 1
+									//console.log("Cref",chord)
+								}
+							} else {
+								if (currentSection && c.children[2] && c.children[2].name === "spPos") {
+									var pos = (c.children[2] && c.children[2].children && c.children[2].children[1]) ? c.children[2].children[1].value : ''
+									//console.log("CBLANK")
+									chordIndex = chordIndex + 1
+									sections[currentSection].push({chord:'', pos:pos})
+								}
+							}
+							
 						}
-						sections[currentSection].push({chord:chord, pos:pos})
 						
 						//if (currentSection && c.children[2] && c.children[2].name === "spPos") {
 							//var pos = (c.children[2] && c.children[2].children && c.children[2].children[1]) ? c.children[2].children[1].value : ''
 						//}
 					}
 				})})
+				//console.log(chordLookups)
+				//console.log(sections)		
+				Object.keys(sections).forEach(function(section) {
+					//console.log(section)		
+					if (Array.isArray(sections[section])) {
+						//console.log(sections[section])		
+						sections[section] = sections[section].map(function(chordMeta) {
+							//console.log(chordMeta)		
+							if (chordMeta && chordMeta.chord) {
+								
+								return chordMeta
+							} else if (chordMeta && chordMeta.chordRef) {
+								
+								var chord = chordMeta && chordLookups[chordMeta.chordRef] ? chordLookups[chordMeta.chordRef] : ''
+								
+								return {chord: chord, pos: chordMeta.pos}
+							} else {
+								
+								return {chord: '', pos: chordMeta.pos}
+							}
+						})
+					}
+				})
+				//console.log(sections)
+				
 			  var layout = xml.children[7].children[1].children.map(function(a) {
 				return {name:a.children[5].value, bars:a.children[6].value}
 			  })
