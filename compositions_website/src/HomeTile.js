@@ -59,7 +59,7 @@ export default function HomeTile({collate, meta, name, loadMeta, hasMeta, metaLi
 			 return <span key={bk} style={{float:'left', marginRight:'0.3em', marginTop:'0.3em'}} >{button}</span>
 		})}
 		</div>
-		{(hasMeta(name) && meta[name] && meta[name].links.length > 0) && <div >{meta[name].links.map(function(l, lk) {
+		{(meta[name] && meta[name].links.length > 0) && <div >{meta[name].links.map(function(l, lk) {
 			
 			if (isYoutubeLink(l)) {
 				return <span key={lk} style={{float:'left', marginRight:'0.3em', marginTop:'0.3em'}} ><YoutubeModal youtubeId={YouTubeGetID(l)} meta={meta[name]} /></span>

@@ -7,12 +7,12 @@ export default function ChordsLayout({song, fontSize}) {
 	var haveRendered = {}
 	var lastRenderedChord = ''
 	var lastTimeSignature = ''
-	return <div>
+	return <div  >
 	 {song ? song.layout.map(function(l, lk) {
 				if (!haveRendered[l.name]) {
 					haveRendered[l.name] = true
 					//	{JSON.stringify(Object.keys(song.sections[l.name]).map(function(s) {return song.sections[l.name][s]}))}
-					return <div key={lk} style={{border:'1px solid black', padding:'1em', fontSize:fontSize ? fontSize : '1.4em'}} >
+					return <div key={lk} style={{border:'1px solid black', padding:'0.3em', fontSize:fontSize ? fontSize : '1.4em'}} >
 						<div style={{marginBottom:'0.5em'}} ><span style={{fontWeight:'bold'}} >{l.name}</span><span style={{fontStyle:'italic', marginLeft:'1em'}} >{mapKeySignature(song.sectionTimeSignatures[l.name])}</span></div>
 						{song.sections[l.name] && <Container	>{Object.keys(song.sections[l.name]).map(function(barChordsKey ,rk) {
 							lastTimeSignature = ''
@@ -24,7 +24,7 @@ export default function ChordsLayout({song, fontSize}) {
 									extraCols.push(<Col key={'b'+i} style={{marginBottom:'0.5em',marginLeft:'0.5em',padding:'0.3em',backgroundColor:'grey', border:'1px solid black'}} ></Col>)
 								}
 							}
-							return <Row key={rk} style={{ height:'3em'}} >{Object.keys(barChordsLine).map(function(beatKey, bck) {
+							return <Row key={rk} style={{ minHeight:'3em'}} >{Object.keys(barChordsLine).map(function(beatKey, bck) {
 								var beat = barChordsLine[beatKey]
 								
 								return <Col key={bck} style={{marginBottom:'0.5em',marginLeft:'0.5em',padding:'0.3em',backgroundColor:'grey', border:'1px solid black'}} >{Object.keys(beat).map(function(beatKey , bk) {
