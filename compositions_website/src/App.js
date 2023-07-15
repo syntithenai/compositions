@@ -33,24 +33,49 @@ function App() {
 	var [metaHash, setMetaHash] = useState({})
 	var splits = files.map(function(file) {
 		var fileParts = file.split(" ./")
+		//console.log(fileParts)
 		var date = fileParts[0]
 		var parts = fileParts[1].split("/")
-		var section = parts[parts.length - 2]
-		var aMarker = parts[parts.length - 3]
-		var preFile =  (aMarker === 'contributions') ? './contributions/' : (aMarker === 'ardour' ? './ardour/' : './')
-		allSections[section] = section
-		var nameParts = parts[parts.length - 1].split(".")
-		var name = nameParts.slice(0,-1).join(".").toLowerCase()
-		allNames[name] = name
-		var type = nameParts[nameParts.length - 1]
-		var d = date.trim().split(' ')
-		//console.log(d)
-		// protect from junk at start of date from cut
-		if (d.length > 1) {
-			//console.log(d)
-			date =  d[1]
+		if (parts.indexOf('ardour') !== -1) {
+			var ardourProjectName = (aMarker === 'contributions') ? parts[parts.length - 2] : ''
+			var section = 'ardour'
+			allSections[section] = section
+			var nameParts = parts[parts.length - 1].split(".")
+			var name = nameParts.slice(0,-1).join(".").toLowerCase()
+			allNames[name] = name
+			var projectName = parts[parts.length - 2]
+			var type = nameParts[nameParts.length - 1]
+			var d = date.trim().split(' ')
+			//console.log(d) 
+			// protect from junk at start of date from cut
+			if (d.length > 1) {
+				//console.log(d)
+				date =  d[1]
+			}
+			
+			var final = {section:section, name: projectName, type: type, file:  'ardour/'+ projectName + "/" + parts[parts.length - 1], date: date.trim()}
+		} else {
+			var aMarker = parts[parts.length - 3]
+			var section = parts[parts.length - 2]
+			allSections[section] = section
+			var nameParts = parts[parts.length - 1].split(".")
+			var name = nameParts.slice(0,-1).join(".").toLowerCase()
+			var preFile =  (aMarker === 'contributions') ? './contributions/' :  './'
+			
+			allNames[name] = name
+			var type = nameParts[nameParts.length - 1]
+			var d = date.trim().split(' ')
+			//console.log(d) 
+			// protect from junk at start of date from cut
+			if (d.length > 1) {
+				//console.log(d)
+				date =  d[1]
+			}
+			var final = {section:section, name: name, type: type, file:  preFile + 	section + "/" + parts[parts.length - 1], date: date.trim()}
+				
 		}
-		var final = {section:section, name: name, type: type, file:  preFile + 	section + "/" + parts[parts.length - 1], date: date.trim()}
+		
+		console.log(final)
 		return final
 	})
 	
